@@ -1,9 +1,10 @@
 package com.likelion.dub.controller;
 
-import com.likelion.dub.domain.dto.BoardWriteRequest;
+import com.likelion.dub.domain.dto.BoardWritingRequest;
 import com.likelion.dub.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,13 +14,14 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<String> getAllClubs() {
-         boardService.getAllClubs();
-        return ResponseEntity.ok().body("동아리 가져오기 성공");
+    public String getAllClubs(Model model) {
+
+         model.addAttribute("board",boardService.getAllClubs());
+        return "";
     }
 
     @PostMapping("/write-post")
-    public ResponseEntity<String> writePost(@RequestBody BoardWriteRequest dto) {
+    public ResponseEntity<String> writePost(@RequestBody BoardWritingRequest dto) {
         boardService.writePost(dto.getTitle(), dto.getContent(), dto.getPhoto());
         return ResponseEntity.ok().body("글 등록 완료");
     }

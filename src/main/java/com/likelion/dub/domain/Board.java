@@ -17,6 +17,8 @@ public class Board {
     private Long Id;
 
     @Column
+    private String clubName;
+    @Column
     private String title;
 
     @Column
