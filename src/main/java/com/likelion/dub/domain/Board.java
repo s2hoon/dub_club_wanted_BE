@@ -24,7 +24,6 @@ public class Board {
     @Column
     private String content;
 
-    @Column
-    private Object photo;
+
 
 }

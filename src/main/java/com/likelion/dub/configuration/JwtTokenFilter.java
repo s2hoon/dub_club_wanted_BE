@@ -3,6 +3,7 @@ package com.likelion.dub.configuration;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.service.MemberService;
 import com.likelion.dub.utils.JwtTokenUtil;
+import io.jsonwebtoken.Jwt;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -50,16 +51,42 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         }
 
-
         //email Token 에서 꺼내기
-        String email=" ";
-        //권한 부여
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("USER")));
-        //detail 을 넣어줍니다
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request, response);
+        String email = JwtTokenUtil.getEmail(token, secretKey);
+        log.info("email:{}", email);
+
+        //role Token 에서 꺼내기
+        String role = JwtTokenUtil.getRole(token, secretKey);
+        log.info("role:{}", role);
+
+        if ( role == "USER"){
+            //권한 부여
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("USER")));
+            //detail 을 넣어줍니다
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request, response);
+        }
+       else if (role == "CLUB") {
+            //권한 부여
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("CLUB")));
+            //detail 을 넣어줍니다
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request, response);
+        }
+       else if (role == "ADMIN") {
+            //권한 부여
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ADMIN")));
+            //detail 을 넣어줍니다
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request, response);
+        }
+
 
     }
 }

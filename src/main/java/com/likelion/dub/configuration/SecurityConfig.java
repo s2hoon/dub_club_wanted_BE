@@ -1,6 +1,7 @@
 package com.likelion.dub.configuration;
 
 
+import com.likelion.dub.domain.Role;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,13 +31,14 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .requestMatchers("/app/member/sign-up", "/app/member/sign-in").permitAll()
-                .requestMatchers(HttpMethod.POST,"/app/member/test").authenticated()
+                .requestMatchers("/app/member/sign-up", "/app/member/sign-in").permitAll() //누구나 접근 가능
+                .requestMatchers(HttpMethod.POST, "/app/member/test").hasRole(Role.ADMIN.name()) //admin 권한 필요
+                .requestMatchers(HttpMethod.POST, "/app/board").hasAnyRole(Role.USER.name(),Role.CLUB.name()) //둘중 하나 권한 필요
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                 .addFilterBefore(new JwtTokenFilter(memberService,secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
 

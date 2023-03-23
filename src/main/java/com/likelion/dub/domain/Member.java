@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @Builder
 @NoArgsConstructor
 @Entity
@@ -23,5 +27,8 @@ public class Member {
     private String password;
     @Column
     private Long stu_num;
+    @Column
+    private String role;
+
 
 }

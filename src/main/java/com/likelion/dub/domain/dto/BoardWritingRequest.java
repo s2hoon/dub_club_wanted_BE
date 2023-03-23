@@ -15,7 +15,5 @@ public class BoardWritingRequest {
     @JsonProperty
     private String content;
 
-    @JsonProperty
-    private Object photo;
 
 }

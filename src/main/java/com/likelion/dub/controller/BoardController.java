@@ -22,7 +22,7 @@ public class BoardController {
 
     @PostMapping("/write-post")
     public ResponseEntity<String> writePost(@RequestBody BoardWritingRequest dto) {
-        boardService.writePost(dto.getTitle(), dto.getContent(), dto.getPhoto());
+        boardService.writePost(dto.getTitle(), dto.getContent());
         return ResponseEntity.ok().body("글 등록 완료");
     }
 

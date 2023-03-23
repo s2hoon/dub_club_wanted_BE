@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum Errorcode {
-    USERNAME_DUPLICATED(HttpStatus.CONFLICT, "");
+    USERNAME_DUPLICATED(HttpStatus.CONFLICT, ""),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, ""),
+
+    ;
 
     private HttpStatus httpStatus;
     private String message;

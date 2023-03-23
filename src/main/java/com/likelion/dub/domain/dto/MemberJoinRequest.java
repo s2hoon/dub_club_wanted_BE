@@ -16,5 +16,7 @@ public class MemberJoinRequest {
     private String password;
     @JsonProperty
     private Long stu_num;
+    @JsonProperty
+    private String role;
 
 }

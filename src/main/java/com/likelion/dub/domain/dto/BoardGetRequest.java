@@ -12,7 +12,5 @@ public class BoardGetRequest {
     private String clubName;
     @JsonProperty
     private String title;
-    @JsonProperty
-    private Object photo;
 
 }

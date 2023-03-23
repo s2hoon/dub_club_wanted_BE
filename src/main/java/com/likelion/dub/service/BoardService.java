@@ -17,10 +17,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-    public List<BoardGetRequest> getAllClubs() {
-        return boardRepository.getAllClubs();
+    public List<Board> getAllClubs() {
+        return boardRepository.findAll();
     }
-    public void writePost(String title, String content, Object photo){
+    public void writePost(String title, String content){
 
     }
 }
