@@ -2,8 +2,12 @@ package com.likelion.dub.service;
 
 
 import com.likelion.dub.domain.Member;
+import com.likelion.dub.exception.AppException;
+import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.repository.MemberRepository;
+import com.likelion.dub.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +22,18 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
 
 
+
+    @Value("${jwt.token.secret}")
+    private String key;
+    private Long expireTimeMs = 1000 * 60 * 60L; //1시간
+
+
+
     public String join(String email, String username, String password,Long stu_num){
         //email 중복 check
         memberRepository.findByEmail(email)
-                .ifPresent(member -> {throw new RuntimeException(email + "는 이미 있습니다");
+                .ifPresent(member -> {
+                    throw new AppException(Errorcode.USERNAME_DUPLICATED, email + "는 이미 있습니다");
     });
     //저장
         Member member = Member.builder()
@@ -38,16 +50,19 @@ public class MemberService {
     }
 
 
-    public String sign_in(String email, String password) {
+    public String login(String email, String password) {
         //email 없음
+        Member selectedUser = memberRepository.findByEmail(email)
+                .orElseThrow(()-> new AppException(Errorcode.USERNAME_DUPLICATED, email + "이 없습니다."));
 
         //비밀번호 틀림
 
         //
 
+        String token = JwtTokenUtil.createToken(selectedUser.getEmail(), key, expireTimeMs);
 
 
-        return "token";
+        return token;
     }
 
 }

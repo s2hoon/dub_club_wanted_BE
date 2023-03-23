@@ -18,15 +18,20 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto){
+    public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
         memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStu_num());
 
         return ResponseEntity.ok().body("회원가입이 성공 했습니다.");
     }
+
     @PostMapping("/sign-in")
-    public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto){
-        String token = memberService.sign_in(dto.getEmail(), dto.getPassword());
+    public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto) {
+        String token = memberService.login(dto.getEmail(), dto.getPassword());
         return ResponseEntity.ok().body(token);
     }
 
+    @PostMapping("/test")
+    public ResponseEntity<String> test(@RequestBody MemberJoinRequest dto) {
+        return ResponseEntity.ok().body("test 성공");
+    }
 }
