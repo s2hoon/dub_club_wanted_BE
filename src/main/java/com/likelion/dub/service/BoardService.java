@@ -34,4 +34,11 @@ public class BoardService {
 
         boardRepository.save(board);
     }
+
+    public Board readPost(Long id) {
+        return boardRepository.findById(id).orElseThrow(
+                () -> new AppException(Errorcode.ID_DOES_NOT_EXIST, "id에 맞는 글이 없습니다.")
+        );
+
+    }
 }

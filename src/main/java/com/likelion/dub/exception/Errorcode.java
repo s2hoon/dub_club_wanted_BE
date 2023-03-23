@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum Errorcode {
     USERNAME_DUPLICATED(HttpStatus.CONFLICT, ""),
-    CLUB_EXIST(HttpStatus.CONFLICT,"" );
+    CLUB_EXIST(HttpStatus.CONFLICT,"" ),
+    ID_DOES_NOT_EXIST(HttpStatus.CONFLICT, "")
+    ;
 
     private HttpStatus httpStatus;
     private String message;

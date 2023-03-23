@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findAll();
     Optional<Board> findByClubName(String clubName);
+    Optional<Board> findById(Long id);
 }

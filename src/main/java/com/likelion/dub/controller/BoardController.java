@@ -35,7 +35,7 @@ public class BoardController {
     }
 
     @GetMapping("/read-post")
-    public ResponseEntity<String> readPost(){
-        return ResponseEntity.ok().body("글 가져오기 성공");
+    public ResponseEntity<Board> readPost(@RequestParam(value= "id", required = true) Long id){
+        return ResponseEntity.ok().body(boardService.readPost(id));
     }
 }
