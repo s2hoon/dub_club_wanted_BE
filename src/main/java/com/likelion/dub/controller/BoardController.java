@@ -15,14 +15,13 @@ public class BoardController {
 
     @GetMapping("/getAll")
     public String getAllClubs(Model model) {
-
          model.addAttribute("board",boardService.getAllClubs());
         return "";
     }
 
     @PostMapping("/write-post")
     public ResponseEntity<String> writePost(@RequestBody BoardWritingRequest dto) {
-        boardService.writePost(dto.getTitle(), dto.getContent(), dto.getPhoto());
+        boardService.writePost(dto.getClubName(),dto.getTitle(), dto.getContent(), dto.getPhoto());
         return ResponseEntity.ok().body("글 등록 완료");
     }
 
