@@ -6,13 +6,15 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BoardGetRequest {
+public class PostWritingRequest {
 
     @JsonProperty
     private String clubName;
     @JsonProperty
     private String title;
     @JsonProperty
-    private Object photo;
+    private String content;
+
+
 
 }
