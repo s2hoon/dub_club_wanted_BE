@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers("/app/member/sign-up", "/app/member/sign-in").permitAll() //누구나 접근 가능
                 .requestMatchers(HttpMethod.POST, "/app/member/test").hasRole(Role.ADMIN.name()) //admin 권한 필요
-                .requestMatchers(HttpMethod.POST, "/app/board").hasAnyRole(Role.USER.name(),Role.CLUB.name()) //둘중 하나 권한 필요
+                .requestMatchers(HttpMethod.POST, "/app/board/write-post").hasRole(Role.CLUB.name()) //둘중 하나 권한 필요
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
