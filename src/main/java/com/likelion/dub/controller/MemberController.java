@@ -19,7 +19,7 @@ public class MemberController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
-        memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStu_num());
+        memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStu_num(),dto.getRole());
 
         return ResponseEntity.ok().body("회원가입이 성공 했습니다.");
     }
@@ -27,7 +27,7 @@ public class MemberController {
     @PostMapping("/sign-in")
     public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto) {
         String token = memberService.login(dto.getEmail(), dto.getPassword());
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok().body("로그인이 성공했습니다. " + "token: Bearer "+ token);
     }
 
     @PostMapping("/test")
