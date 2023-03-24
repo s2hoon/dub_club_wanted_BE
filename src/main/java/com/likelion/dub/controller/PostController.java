@@ -1,6 +1,6 @@
 package com.likelion.dub.controller;
 
-import com.likelion.dub.domain.Board;
+import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.PostWritingRequest;
 import com.likelion.dub.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app/board")
+@RequestMapping("/app/post")
 public class PostController {
     private final PostService postService;
 
@@ -19,7 +19,7 @@ public class PostController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Board>> getAllClubs(Model model) {
+    public ResponseEntity<List<Post>> getAllClubs(Model model) {
 
         return ResponseEntity.ok().body(postService.getAllClubs());
 
@@ -32,7 +32,7 @@ public class PostController {
     }
 
     @GetMapping("/read-post")
-    public ResponseEntity<Board> readPost(@RequestParam(value= "id", required = true) Long id){
+    public ResponseEntity<Post> readPost(@RequestParam(value= "id", required = true) Long id){
         return ResponseEntity.ok().body(postService.readPost(id));
     }
 }
