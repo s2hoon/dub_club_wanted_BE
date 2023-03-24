@@ -1,10 +1,7 @@
 package com.likelion.dub.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +16,16 @@ import java.util.List;
 @Getter
 public class Tag {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tag_id")
     private Long id;
 
+
     @Column
-    private List<String> tag_name;
+    private String tag_name;
 
-
+    @ManyToOne
+    @JoinColumn(name = "club_id")
+    private Club club;
 
 }

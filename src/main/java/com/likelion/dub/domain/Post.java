@@ -25,5 +25,10 @@ public class Post {
     private String content;
 
 
+    @Column
+    private String photo;
+
+
+
 
 }
