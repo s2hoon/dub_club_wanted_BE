@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BoardGetRequest {
+public class PostGetRequest {
 
     @JsonProperty
     private String clubName;
