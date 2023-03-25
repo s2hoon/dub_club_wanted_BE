@@ -68,7 +68,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if ( "USER".equals(role)){
             //권한 부여
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("USER")));
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
             //detail 을 넣어줍니다
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -77,7 +77,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
        else if ("CLUB".equals(role)) {
             //권한 부여
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("CLUB")));
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ROLE_CLUB")));
             //detail 을 넣어줍니다
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -86,7 +86,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
        else if ("ADMIN".equals(role)) {
             //권한 부여
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ADMIN")));
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
             //detail 을 넣어줍니다
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
