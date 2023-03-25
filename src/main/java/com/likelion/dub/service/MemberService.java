@@ -51,7 +51,7 @@ public class MemberService {
         //email 중복 check
         memberRepository.findByEmail(email)
                 .ifPresent(member -> {
-                    throw new AppException(Errorcode.USERNAME_DUPLICATED, email + "는 이미 있습니다");
+                    throw new AppException(Errorcode.USERNAME_DUPLICATED);
                 });
         //저장
         Member member = Member.builder()
@@ -72,12 +72,12 @@ public class MemberService {
     public String login(String email, String password) {
         //email 없음
         Member selectedUser = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(Errorcode.USERNAME_DUPLICATED, email + "이 없습니다."));
+                .orElseThrow(() -> new AppException(Errorcode.USERNAME_DUPLICATED));
 
 
         //비밀번호 틀림
         if (!encoder.matches(password, selectedUser.getPassword())) {
-            throw new AppException(Errorcode.INVALID_PASSWORD, "패스워드를 잘못 입력했습니다");
+            throw new AppException(Errorcode.INVALID_PASSWORD);
         }
 
         String token = JwtTokenUtil.createToken(selectedUser.getEmail(),selectedUser.getRole(), key, expireTimeMs);
