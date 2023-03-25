@@ -22,7 +22,7 @@ public class PostService {
     public void writePost(String clubName,String title, String content){
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
-                    throw new AppException(Errorcode.CLUB_EXIST, "이미 작성하신 글이 있습니다.");
+                    throw new AppException(Errorcode.CLUB_EXIST);
                 });
 
         Post post = Post.builder()
@@ -36,7 +36,7 @@ public class PostService {
 
     public Post readPost(Long id) {
         return postRepository.findById(id).orElseThrow(
-                () -> new AppException(Errorcode.ID_DOES_NOT_EXIST, "id에 맞는 글이 없습니다.")
+                () -> new AppException(Errorcode.ID_DOES_NOT_EXIST)
         );
 
     }
