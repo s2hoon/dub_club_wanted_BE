@@ -21,6 +21,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+
+/**
+ * JwtTokenFilter는 Spring Security에서 인증된 사용자의 요청에 대해 실행됩니다.
+ * doFilterInternal() 메소드를 통해 요청에 대한 필터링이 이루어지며, 인증 토큰을 추출하여 이를 이용해 인증된 사용자의 권한을 설정합니다
+ * 이후 요청이 컨트롤러로 전달됩니다. 따라서 JwtTokenFilter는 인증된 사용자가 보호된 자원에 접근할 때마다 실행됩니다.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -59,28 +65,28 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String role = JwtTokenUtil.getRole(token, secretKey);
         log.info("role:{}", role);
 
-        if ( role == "USER"){
+        if ( "USER".equals(role)){
             //권한 부여
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("USER")));
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
             //detail 을 넣어줍니다
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         }
-       else if (role == "CLUB") {
+       else if ("CLUB".equals(role)) {
             //권한 부여
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("CLUB")));
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ROLE_CLUB")));
             //detail 을 넣어줍니다
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         }
-       else if (role == "ADMIN") {
+       else if ("ADMIN".equals(role)) {
             //권한 부여
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ADMIN")));
+                    new UsernamePasswordAuthenticationToken(email, null, List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
             //detail 을 넣어줍니다
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @Entity
@@ -16,6 +19,7 @@ public class Club {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "club_id")
     private Long id;
 
     @Column
@@ -24,10 +28,12 @@ public class Club {
     @Column
     private String introduction;
 
-    @Column
-    private String tag_id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-
+    @OneToMany(mappedBy = "club")
+    private List<Tag> tags = new ArrayList<>();
 
 
 }
