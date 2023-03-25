@@ -1,11 +1,19 @@
 package com.likelion.dub.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.likelion.dub.common.BaseException;
+import com.likelion.dub.common.BaseResponse;
+import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.dto.MemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberLoginRequest;
+import com.likelion.dub.exception.AppException;
+import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.likelion.dub.common.BaseResponseStatus.WRONG_EMAIL;
 
 @RestController
 @RequestMapping("/app/member")
@@ -20,15 +28,16 @@ public class MemberController {
      * @return
      */
     @GetMapping("/email/{email}")
-    public ResponseEntity<String> checkEmail(@PathVariable String email) {
+    public BaseResponse<String> checkEmail(@PathVariable String email) {
 
+            boolean isEmailAvailable = memberService.checkEmail(email);
+            if (isEmailAvailable) {
+                String result = "이메일 사용 가능";
+                return new BaseResponse<>(result);
+            } else {
+                return new BaseResponse<>(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+            }
 
-        boolean isEmailAvailable = memberService.checkEmail(email);
-        if(isEmailAvailable) {
-            return ResponseEntity.ok().body("이메일 사용 가능");
-        } else {
-            return ResponseEntity.ok().body("해당 이메일이 이미 사용 중입니다");
-        }
     }
 
     /**
@@ -37,12 +46,13 @@ public class MemberController {
      * @return
      */
     @GetMapping("/stunum/{stunum}")
-    public ResponseEntity<String> checkStunum(@PathVariable Long stunum) {
+    public BaseResponse<String> checkStunum(@PathVariable Long stunum) {
         boolean isStunumAvailable = memberService.checkStunum(stunum);
         if(isStunumAvailable) {
-            return ResponseEntity.ok().body("학번 사용 가능");
+            String result = "학번 사용 가능";
+            return new BaseResponse<>(result);
         } else {
-            return ResponseEntity.ok().body("해당 학번이 이미 사용 중입니다");
+            return new BaseResponse<>(BaseResponseStatus.STU_NUM_ALREADY_EXIST);
         }
     }
 
@@ -53,10 +63,15 @@ public class MemberController {
      * @return
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
+    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) {
+        try{
+            memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
+            String result = "회원 가입 완료";
+            return new BaseResponse<>(result);
+        } catch (AppException e){
+            return new BaseResponse<>(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+        }
 
-        memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
-        return ResponseEntity.ok().body("회원가입이 성공 했습니다.");
     }
 
     /**
@@ -65,9 +80,17 @@ public class MemberController {
      * @return
      */
     @PostMapping("/sign-in")
-    public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto) {
-        String token = memberService.login(dto.getEmail(), dto.getPassword());
-        return ResponseEntity.ok().body("로그인이 성공했습니다. " + "token: Bearer "+ token);
+    public BaseResponse<String> login(@RequestBody MemberLoginRequest dto) {
+        try {
+            String token = memberService.login(dto.getEmail(), dto.getPassword());
+            return new BaseResponse<>(token);
+
+        } catch (BaseException e) {
+            BaseResponseStatus result = e.getStatus();
+            return new BaseResponse<>(result);
+        }
+
+
     }
 
     /**
