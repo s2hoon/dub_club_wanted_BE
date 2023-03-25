@@ -1,6 +1,8 @@
 package com.likelion.dub.service;
 
 
+import com.likelion.dub.common.BaseException;
+import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Role;
 import com.likelion.dub.exception.AppException;
@@ -42,7 +44,6 @@ public class MemberService {
 
     public boolean checkStunum(Long stunum) {
         Optional<Member> member = memberRepository.findByStunum(stunum);
-        log.info(member.get().getStunum().toString());
         return !member.isPresent();
     }
 
@@ -69,15 +70,14 @@ public class MemberService {
     }
 
 
-    public String login(String email, String password) {
+    public String login(String email, String password) throws BaseException {
         //email 없음
         Member selectedUser = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(Errorcode.USERNAME_DUPLICATED));
-
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
 
         //비밀번호 틀림
         if (!encoder.matches(password, selectedUser.getPassword())) {
-            throw new AppException(Errorcode.INVALID_PASSWORD);
+            throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
         }
 
         String token = JwtTokenUtil.createToken(selectedUser.getEmail(),selectedUser.getRole(), key, expireTimeMs);
