@@ -35,10 +35,10 @@ class MemberControllerTest {
         String email = "fdsafdsa";
         String username = "hi";
         String password = "1234";
-        Long stu_num = 1234L;
+        Long stunum = 1234L;
         mockMvc.perform(post("/app/member/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new MemberJoinRequest(email, username, password, stu_num))))
+                        .content(objectMapper.writeValueAsBytes(new MemberJoinRequest(email, username, password, stunum))))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -51,10 +51,10 @@ class MemberControllerTest {
         String email = "fdsafdsa";
         String username = "hi";
         String password = "1234";
-        Long stu_num = 1234L;
+        Long stunum = 1234L;
         mockMvc.perform(post("/app/member/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new MemberJoinRequest(email, username, password, stu_num))))
+                        .content(objectMapper.writeValueAsBytes(new MemberJoinRequest(email, username, password, stunum))))
                 .andDo(print())
                 .andExpect(status().isConflict());
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @Getter
-public class Board {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +23,11 @@ public class Board {
 
     @Column
     private String content;
+
+
+    @Column
+    private String photo;
+
 
 
 
