@@ -63,15 +63,15 @@ public class MemberController {
      * @return
      */
     @PostMapping("/sign-up")
-    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) {
-        try{
-            memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
-            String result = "회원 가입 완료";
-            return new BaseResponse<>(result);
-        } catch (AppException e){
-            return new BaseResponse<>(BaseResponseStatus.EMAIL_ALREADY_EXIST);
-        }
-
+    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) throws BaseException{
+            try {
+                memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
+                String result = "회원 가입 완료";
+                return new BaseResponse<>(result);
+            }
+            catch(BaseException e){
+                return new BaseResponse<>(e.getStatus());
+            }
     }
 
     /**

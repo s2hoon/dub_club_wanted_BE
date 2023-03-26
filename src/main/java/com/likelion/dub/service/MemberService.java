@@ -48,11 +48,13 @@ public class MemberService {
     }
 
 
-    public String join(String email, String username, String password, Long stunum, String role) {
+    public void join(String email, String username, String password, Long stunum, String role) {
         //email 중복 check
         memberRepository.findByEmail(email)
                 .ifPresent(member -> {
-                    throw new AppException(Errorcode.USERNAME_DUPLICATED);
+
+                        throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+
                 });
         //저장
         Member member = Member.builder()
@@ -66,7 +68,6 @@ public class MemberService {
         memberRepository.save(member);
 
 
-        return "SUCCESS";
     }
 
 
