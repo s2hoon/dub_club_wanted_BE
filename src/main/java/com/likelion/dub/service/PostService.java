@@ -1,5 +1,9 @@
 package com.likelion.dub.service;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.likelion.dub.common.BaseException;
+import com.likelion.dub.common.BaseResponse;
+import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Post;
 import com.likelion.dub.exception.AppException;
 import com.likelion.dub.exception.Errorcode;
@@ -19,10 +23,14 @@ public class PostService {
     public List<Post> getAllClubs() {
         return this.postRepository.findAll();
     }
-    public void writePost(String clubName,String title, String content){
+    public BaseResponse<String> writePost(String clubName,String title, String content) throws BaseException {
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
-                    throw new AppException(Errorcode.CLUB_EXIST);
+                    try {
+                        throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
+                    } catch (BaseException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
 
         Post post = Post.builder()
@@ -32,11 +40,18 @@ public class PostService {
                 .build();
 
         postRepository.save(post);
+        return new BaseResponse<>("글 작성 성공");
     }
 
-    public Post readPost(Long id) {
-        return postRepository.findById(id).orElseThrow(
-                () -> new AppException(Errorcode.ID_DOES_NOT_EXIST)
+    public Post readPost(Long id) throws BaseException{
+        return postRepository.findById(id)
+                .orElseThrow(() -> {
+                    try {
+                        throw new BaseException(BaseResponseStatus.NOT_EXISTS_POST);
+                    } catch (BaseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
         );
 
     }
