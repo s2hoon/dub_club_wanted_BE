@@ -52,11 +52,9 @@ public class MemberService {
         //email 중복 check
         memberRepository.findByEmail(email)
                 .ifPresent(member -> {
-                    try {
+
                         throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
-                    } catch (BaseException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 });
         //저장
         Member member = Member.builder()

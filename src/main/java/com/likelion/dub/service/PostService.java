@@ -26,11 +26,8 @@ public class PostService {
     public BaseResponse<String> writePost(String clubName,String title, String content) throws BaseException {
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
-                    try {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
-                    } catch (BaseException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 });
 
         Post post = Post.builder()
@@ -45,13 +42,9 @@ public class PostService {
 
     public Post readPost(Long id) throws BaseException{
         return postRepository.findById(id)
-                .orElseThrow(() -> {
-                    try {
-                        throw new BaseException(BaseResponseStatus.NOT_EXISTS_POST);
-                    } catch (BaseException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                .orElseThrow(() ->
+                        new BaseException(BaseResponseStatus.NOT_EXISTS_POST)
+
         );
 
     }

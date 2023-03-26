@@ -64,9 +64,14 @@ public class MemberController {
      */
     @PostMapping("/sign-up")
     public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) throws BaseException{
-            memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
-            String result = "회원 가입 완료";
-            return new BaseResponse<>(result);
+            try {
+                memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
+                String result = "회원 가입 완료";
+                return new BaseResponse<>(result);
+            }
+            catch(BaseException e){
+                return new BaseResponse<>(e.getStatus());
+            }
     }
 
     /**
