@@ -65,7 +65,6 @@ public class MemberService {
 
         memberRepository.save(member);
 
-
         return "SUCCESS";
     }
 
@@ -86,20 +85,8 @@ public class MemberService {
     }
 
 
-    public void changePassword(Long id, String password) {
-
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
-        member.setPassword(password);
-        memberRepository.save(member);
-    }
-
-    public boolean checkIdEquals(Authentication authentication, Long id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
-        return member.getUsername().equals(authentication.getName());
 
 
-    }
+
 }
 

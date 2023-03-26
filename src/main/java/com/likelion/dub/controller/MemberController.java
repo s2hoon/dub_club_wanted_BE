@@ -94,22 +94,6 @@ public class MemberController {
     }
 
     /**
-     * 비밀번호 수정
-     * @param id
-     * @param password
-     */
-    @PutMapping("/{id}/password")
-    public ResponseEntity<String> changePassword(@PathVariable Long id, @RequestParam String password) {
-        try{
-            memberService.changePassword(id, password);
-            return ResponseEntity.ok().body("비밀번호 수정완료");
-        }catch(Exception e){
-            return ResponseEntity.ok().body("비밀번호 수정실패");
-        }
-
-    }
-
-    /**
      * test api
      * @param dto
      * @return
