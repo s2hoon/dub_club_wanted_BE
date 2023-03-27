@@ -1,5 +1,8 @@
 package com.likelion.dub.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.likelion.dub.common.BaseException;
+import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.PostWritingRequest;
 import com.likelion.dub.service.PostService;
@@ -23,8 +26,8 @@ public class PostController {
      * @return all post
      */
     @GetMapping("/getAll")
-    public ResponseEntity<List<Post>> getAllClubs() {
-        return ResponseEntity.ok().body(postService.getAllClubs());
+    public BaseResponse<List<Post>> getAllClubs() {
+        return new BaseResponse<>(postService.getAllClubs());
 
     }
 
@@ -35,9 +38,14 @@ public class PostController {
      */
 
     @PostMapping("/write-post")
-    public ResponseEntity<String> writePost(@RequestBody PostWritingRequest dto) {
-        postService.writePost(dto.getClubName(),dto.getTitle(), dto.getContent());
-        return ResponseEntity.ok().body("글 등록 완료");
+    public BaseResponse<String> writePost(@RequestBody PostWritingRequest dto) throws BaseException {
+        try {
+            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent());
+            return new BaseResponse<>("글 작성 성공");
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
     /**
@@ -46,7 +54,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/read-post")
-    public ResponseEntity<Post> readPost(@RequestParam(value= "id", required = true) Long id){
-        return ResponseEntity.ok().body(postService.readPost(id));
+    public BaseResponse<Post> readPost(@RequestParam(value= "id", required = true) Long id) throws BaseException {
+        return new BaseResponse<>(postService.readPost(id));
     }
 }

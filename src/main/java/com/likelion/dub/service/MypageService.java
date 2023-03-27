@@ -20,11 +20,12 @@ public class MypageService {
     private final BCryptPasswordEncoder encoder;
 
 
-//    public String loadMemberByEmail(String email) throws BaseException {
-//        Member selectedUser = memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
-//
-//
-//    }
+    public Member loadMemberByEmail(String email) throws BaseException {
+        Member selectedUser = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
+
+        return selectedUser;
+
+    }
 
 }

@@ -35,7 +35,7 @@ public class MemberController {
                 String result = "이메일 사용 가능";
                 return new BaseResponse<>(result);
             } else {
-                return new BaseResponse<>(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+                return new BaseResponse(BaseResponseStatus.EMAIL_ALREADY_EXIST);
             }
 
     }
@@ -52,7 +52,7 @@ public class MemberController {
             String result = "학번 사용 가능";
             return new BaseResponse<>(result);
         } else {
-            return new BaseResponse<>(BaseResponseStatus.STU_NUM_ALREADY_EXIST);
+            return new BaseResponse(BaseResponseStatus.STU_NUM_ALREADY_EXIST);
         }
     }
 
@@ -63,15 +63,15 @@ public class MemberController {
      * @return
      */
     @PostMapping("/sign-up")
-    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) {
-        try{
-            memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
-            String result = "회원 가입 완료";
-            return new BaseResponse<>(result);
-        } catch (AppException e){
-            return new BaseResponse<>(BaseResponseStatus.EMAIL_ALREADY_EXIST);
-        }
-
+    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) throws BaseException{
+            try {
+                memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
+                String result = "회원 가입 완료";
+                return new BaseResponse<>(result);
+            }
+            catch(BaseException e){
+                return new BaseResponse(e.getStatus());
+            }
     }
 
     /**
@@ -83,11 +83,11 @@ public class MemberController {
     public BaseResponse<String> login(@RequestBody MemberLoginRequest dto) {
         try {
             String token = memberService.login(dto.getEmail(), dto.getPassword());
-            return new BaseResponse<>(token);
+            return new BaseResponse<>("Bearer "+token);
 
         } catch (BaseException e) {
             BaseResponseStatus result = e.getStatus();
-            return new BaseResponse<>(result);
+            return new BaseResponse(result);
         }
 
 

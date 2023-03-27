@@ -48,11 +48,13 @@ public class MemberService {
     }
 
 
-    public String join(String email, String username, String password, Long stunum, String role) {
+    public void join(String email, String username, String password, Long stunum, String role) {
         //email 중복 check
         memberRepository.findByEmail(email)
                 .ifPresent(member -> {
-                    throw new AppException(Errorcode.USERNAME_DUPLICATED);
+
+                        throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+
                 });
         //저장
         Member member = Member.builder()
@@ -65,7 +67,7 @@ public class MemberService {
 
         memberRepository.save(member);
 
-        return "SUCCESS";
+
     }
 
 
@@ -85,8 +87,20 @@ public class MemberService {
     }
 
 
+    public void changePassword(Long id, String password) {
+
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
+        member.setPassword(password);
+        memberRepository.save(member);
+    }
+
+    public boolean checkIdEquals(Authentication authentication, Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
+        return member.getUsername().equals(authentication.getName());
 
 
-
+    }
 }
 
