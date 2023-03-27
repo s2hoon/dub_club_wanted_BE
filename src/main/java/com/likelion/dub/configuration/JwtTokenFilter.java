@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.SignatureException;
 import java.util.List;
 
 /**
@@ -37,13 +38,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("authorization:{}", authorization);
+            final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+            log.info("authorization:{}", authorization);
+
 
         //token 안보내면 Block
         if (authorization == null || !authorization.startsWith("Bearer ")) {
 
-            log.error("authorization 이 없습니다");
+            log.error("No Token");
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,7 +53,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = authorization.split(" ")[1];
         //token expired 여부
         if (JwtTokenUtil.isExpired(token, secretKey)) {
-            log.error("token 만료");
+            log.error("token Expired");
             filterChain.doFilter(request, response);
             return;
 
