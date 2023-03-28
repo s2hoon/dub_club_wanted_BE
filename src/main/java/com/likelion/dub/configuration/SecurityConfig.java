@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 //.cors().and()
                 .authorizeRequests()
-                .requestMatchers("/app/member/sign-up", "/app/member/sign-in", "/app/member/email/{email}", "/app/member/stunum/{stunum}").permitAll() //누구나 접근 가능
+                .requestMatchers("/app/member/sign-up", "/app/member/sign-in", "/app/member/email/{email}", "/app/member/stunum/{stunum}","/app/post/getAll").permitAll() //누구나 접근 가능
                 .requestMatchers(Swagger_url).permitAll()
                 .requestMatchers(HttpMethod.POST, "/app/member/test").hasRole("ADMIN") //admin 권한 필요
                 .requestMatchers(HttpMethod.POST, "/app/post/write-post").hasRole("CLUB") //CLUB 권한 필요
