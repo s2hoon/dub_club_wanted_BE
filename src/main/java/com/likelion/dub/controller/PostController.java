@@ -40,7 +40,7 @@ public class PostController {
     @PostMapping("/write-post")
     public BaseResponse<String> writePost(@RequestBody PostWritingRequest dto) throws BaseException {
         try {
-            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent());
+            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), dto.getCategory());
             return new BaseResponse<>("글 작성 성공");
         }
         catch(BaseException e){
