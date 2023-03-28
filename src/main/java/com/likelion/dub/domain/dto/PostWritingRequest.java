@@ -15,6 +15,9 @@ public class PostWritingRequest {
     @JsonProperty
     private String content;
 
+    @JsonProperty
+    private int category;
+
 
 
 }

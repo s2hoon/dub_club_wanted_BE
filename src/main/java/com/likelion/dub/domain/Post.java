@@ -28,6 +28,10 @@ public class Post {
     @Column
     private String photo;
 
+    @Column
+    private int category;
+
+
 
 
 

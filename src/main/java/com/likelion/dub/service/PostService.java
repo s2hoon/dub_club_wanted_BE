@@ -23,7 +23,7 @@ public class PostService {
     public List<Post> getAllClubs() {
         return this.postRepository.findAll();
     }
-    public BaseResponse<String> writePost(String clubName,String title, String content) throws BaseException {
+    public BaseResponse<String> writePost(String clubName,String title, String content,int category) throws BaseException {
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
@@ -34,6 +34,7 @@ public class PostService {
                 .clubName(clubName)
                 .title(title)
                 .content(content)
+                .category(category)
                 .build();
 
         postRepository.save(post);
