@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -53,17 +55,36 @@ public class MypageController {
     }
 
 
+    /**
+     * 비밀번호 수정
+     * @param passwordRequest
+     * @return
+     */
+    @PutMapping("/password")
+    public BaseResponse<String> changePassword(@RequestBody PasswordRequest passwordRequest) {
+        String currentPassword = passwordRequest.getCurrentPassword();
+        String newPassword = passwordRequest.getNewPassword();
 
 
-//    @PutMapping("/password")
-//    public BaseResponse<String> changePassword(@RequestBody PasswordRequest passwordRequest) {
-//        String currentPassword = passwordRequest.getCurrentPassword();
-//        String newPassword = passwordRequest.getNewPassword();
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        authentication.getName();
-//
-//
-//    }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //jwt token 오류
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        }
+        String email = authentication.getName();
+        Member member = mypageService.loadMemberByEmail(email);
+        //current password wrong
+        if (!BCrypt.checkpw(passwordRequest.getCurrentPassword(), member.getPassword())) {
+            return new BaseResponse(BaseResponseStatus.WRONG_PASSWORD);
+        }
+        //새로운 비밀번호 암호화하여 업데이트
+        String hashedPassword = BCrypt.hashpw(passwordRequest.getNewPassword(), BCrypt.gensalt());
+        member.setPassword(hashedPassword);
+        mypageService.save(member);
+
+        String result = "비밀번호 수정 완료";
+        return new BaseResponse<>(result);
+
+    }
 
 }
