@@ -18,6 +18,7 @@ import static com.likelion.dub.common.BaseResponseStatus.WRONG_EMAIL;
 @RestController
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 public class MemberController {
 
     private final MemberService memberService;
