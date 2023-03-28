@@ -28,4 +28,10 @@ public class MypageService {
 
     }
 
+    public Member save(Member member) {
+        memberRepository.save(member);
+        return member;
+
+    }
+
 }
