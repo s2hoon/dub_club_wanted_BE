@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/post")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 public class PostController {
     private final PostService postService;
 
