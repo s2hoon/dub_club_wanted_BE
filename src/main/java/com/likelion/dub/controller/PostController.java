@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.util.List;
 
 @RestController
@@ -38,9 +40,9 @@ public class PostController {
      */
 
     @PostMapping("/write-post")
-    public BaseResponse<String> writePost(@RequestBody PostWritingRequest dto) throws BaseException {
+    public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value="images", required = false)List<MultipartFile> files) throws BaseException {
         try {
-            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent());
+            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), files);
             return new BaseResponse<>("글 작성 성공");
         }
         catch(BaseException e){
