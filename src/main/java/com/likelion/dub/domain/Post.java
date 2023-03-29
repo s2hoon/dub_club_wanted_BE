@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @Entity
@@ -22,16 +25,27 @@ public class Post {
     private String title;
 
     @Column
+    @Lob
     private String content;
 
 
-    @Column
-    private String photo;
+    @OneToMany(
+            mappedBy = "post",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<Image> image = new ArrayList<>();
 
     @Column
     private int category;
 
 
+    public void addImage(Image image){
+        this.image.add(image);
+
+        if(image.getPost() != this)
+            image.setPost(this);
+    }
 
 
 
