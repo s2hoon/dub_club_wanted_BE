@@ -20,6 +20,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final MemberService memberService;
+    private static final String[] Swagger_url = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
     @Value("${jwt.token.secret}")
     private String secretKey;
 
@@ -29,12 +42,12 @@ public class SecurityConfig {
         return http
                 .httpBasic().disable()
                 .csrf().disable()
-                .cors().and()
+                //.cors().and()
                 .authorizeRequests()
-                .requestMatchers("/app/member/sign-up", "/app/member/sign-in","/app/member/email/{email}","/app/member/stunum/{stunum}").permitAll() //누구나 접근 가능
+                .requestMatchers("/app/member/sign-up", "/app/member/sign-in", "/app/member/email/{email}", "/app/member/stunum/{stunum}","/app/post/getAll").permitAll() //누구나 접근 가능
+                .requestMatchers(Swagger_url).permitAll()
                 .requestMatchers(HttpMethod.POST, "/app/member/test").hasRole("ADMIN") //admin 권한 필요
                 .requestMatchers(HttpMethod.POST, "/app/post/write-post").hasRole("CLUB") //CLUB 권한 필요
-                .requestMatchers(HttpMethod.PUT,"/app/member/{id}/password").access("@memberService.checkIdEquals(authentication,#id)")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

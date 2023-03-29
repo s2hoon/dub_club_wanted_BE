@@ -18,6 +18,7 @@ import static com.likelion.dub.common.BaseResponseStatus.WRONG_EMAIL;
 @RestController
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 public class MemberController {
 
     private final MemberService memberService;
@@ -35,7 +36,7 @@ public class MemberController {
                 String result = "이메일 사용 가능";
                 return new BaseResponse<>(result);
             } else {
-                return new BaseResponse<>(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+                return new BaseResponse(BaseResponseStatus.EMAIL_ALREADY_EXIST);
             }
 
     }
@@ -52,7 +53,7 @@ public class MemberController {
             String result = "학번 사용 가능";
             return new BaseResponse<>(result);
         } else {
-            return new BaseResponse<>(BaseResponseStatus.STU_NUM_ALREADY_EXIST);
+            return new BaseResponse(BaseResponseStatus.STU_NUM_ALREADY_EXIST);
         }
     }
 
@@ -70,7 +71,7 @@ public class MemberController {
                 return new BaseResponse<>(result);
             }
             catch(BaseException e){
-                return new BaseResponse<>(e.getStatus());
+                return new BaseResponse(e.getStatus());
             }
     }
 
@@ -83,29 +84,13 @@ public class MemberController {
     public BaseResponse<String> login(@RequestBody MemberLoginRequest dto) {
         try {
             String token = memberService.login(dto.getEmail(), dto.getPassword());
-            return new BaseResponse<>(token);
+            return new BaseResponse<>("Bearer "+token);
 
         } catch (BaseException e) {
             BaseResponseStatus result = e.getStatus();
-            return new BaseResponse<>(result);
+            return new BaseResponse(result);
         }
 
-
-    }
-
-    /**
-     * 비밀번호 수정
-     * @param id
-     * @param password
-     */
-    @PutMapping("/{id}/password")
-    public ResponseEntity<String> changePassword(@PathVariable Long id, @RequestParam String password) {
-        try{
-            memberService.changePassword(id, password);
-            return ResponseEntity.ok().body("비밀번호 수정완료");
-        }catch(Exception e){
-            return ResponseEntity.ok().body("비밀번호 수정실패");
-        }
 
     }
 

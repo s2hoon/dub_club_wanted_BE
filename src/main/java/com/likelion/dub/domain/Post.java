@@ -36,6 +36,10 @@ public class Post {
     )
     private List<Image> image = new ArrayList<>();
 
+    @Column
+    private int category;
+
+
     public void addImage(Image image){
         this.image.add(image);
 

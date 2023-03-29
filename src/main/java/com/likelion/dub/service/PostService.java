@@ -27,7 +27,7 @@ public class PostService {
     public List<Post> getAllClubs() {
         return this.postRepository.findAll();
     }
-    public BaseResponse<String> writePost(String clubName, String title, String content, List<MultipartFile> files) throws BaseException {
+    public BaseResponse<String> writePost(String clubName,String title, String content,int category, List<MultipartFile> files) throws BaseException {
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
@@ -38,6 +38,7 @@ public class PostService {
                 .clubName(clubName)
                 .title(title)
                 .content(content)
+                .category(category)
                 .build();
         List<Image> imageList = fileHandler.parseFileInfo(files);
 

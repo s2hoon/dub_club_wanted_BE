@@ -1,28 +1,23 @@
 package com.likelion.dub.domain.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
-@Getter
 @AllArgsConstructor
-public class PostWritingRequest {
-
+@Getter
+public class MyPageResponse {
     @JsonProperty
-    private String clubName;
+    private String email;
     @JsonProperty
-    private String title;
+    private String username;
     @JsonProperty
-    private String content;
-
+    private Long stunum;
     @JsonProperty
-    private int category;
-
-
-
+    private String role;
 
 
 }

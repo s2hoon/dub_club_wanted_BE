@@ -34,6 +34,8 @@ public enum BaseResponseStatus {
     INVALID_MEMBER_JWT(false,2300,"권한이 없는 회원의 접근입니다."),
     EMPTY_PROFILE_IMAGE(false, 2301, "프로필 이미지를 입력해주세요."),
 
+    JWT_TOKEN_ERROR(false, 2302, "jwt 토큰을 확인해주세요"),
+
     // post
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
     POST_POSTS_INVALID_TITLE(false, 2011, "제목의 글자수를 확인해주세요."),

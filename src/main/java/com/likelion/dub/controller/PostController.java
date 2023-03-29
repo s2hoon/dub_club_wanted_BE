@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/post")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 public class PostController {
     private final PostService postService;
 
@@ -42,7 +43,7 @@ public class PostController {
     @PostMapping("/write-post")
     public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value="images", required = false)List<MultipartFile> files) throws BaseException {
         try {
-            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), files);
+            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), dto.getCategory(), files);
             return new BaseResponse<>("글 작성 성공");
         }
         catch(BaseException e){
