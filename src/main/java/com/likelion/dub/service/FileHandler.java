@@ -3,6 +3,7 @@ package com.likelion.dub.service;
 import com.likelion.dub.domain.Image;
 import com.likelion.dub.domain.dto.ImageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class FileHandler {
     private final ImageService imageService;
     public List<Image> parseFileInfo(List<MultipartFile> multipartFiles) throws RuntimeException{
@@ -34,8 +36,10 @@ public class FileHandler {
             String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
             // 파일을 저장할 세부 경로 지정
+
             String path = "images" + File.separator + current_date;
             File file = new File(path);
+            log.info(file.toString());
 
             // 디렉터리가 존재하지 않을 경우
             if(!file.exists()) {
@@ -75,7 +79,7 @@ public class FileHandler {
                         .filePath(path + File.separator + new_file_name)
                         .fileSize(multipartFile.getSize())
                         .build();
-
+                log.info(imageDto.toString());
                 // 파일 DTO 이용하여 Photo 엔티티 생성
                 Image photo = new Image(
                         imageDto.getOrigFileName(),
@@ -94,7 +98,7 @@ public class FileHandler {
                 catch(IOException e){
                     throw new UncheckedIOException("not yet", e);
                 }
-
+                log.info(filelist.toString());
                 // 파일 권한 설정(쓰기, 읽기)
                 file.setWritable(true);
                 file.setReadable(true);

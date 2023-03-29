@@ -47,7 +47,7 @@ public class PostService {
                     post.addImage(imageRepository.save(image));
                 }
             }
-        postRepository.save(post);
+            postRepository.save(post);
         return new BaseResponse<>("글 작성 성공");
     }
 
