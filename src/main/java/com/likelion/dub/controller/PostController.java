@@ -3,7 +3,9 @@ package com.likelion.dub.controller;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
+import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Post;
+import com.likelion.dub.domain.dto.PostEditRequest;
 import com.likelion.dub.domain.dto.PostWritingRequest;
 import com.likelion.dub.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -62,4 +64,12 @@ public class PostController {
     public BaseResponse<Post> readPost(@RequestParam(value= "id", required = true) Long id) throws BaseException {
         return new BaseResponse<>(postService.readPost(id));
     }
+    @PutMapping("/edit")
+    public BaseResponse<String> editPost(@RequestBody PostEditRequest dto) throws BaseException{
+        String newTitle = dto.getTitle();
+        String newContent = dto.getContent();
+        int newCategory = dto.getCategory();
+        return new BaseResponse<>("여기 해야됨");
+    }
 }
+
