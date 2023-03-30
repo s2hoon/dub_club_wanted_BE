@@ -40,13 +40,15 @@ public class PostService {
                 .title(title)
                 .content(content)
                 .category(category)
+                .image(fileHandler.parseFileInfo(files))
                 .build();
         List<Image> imageList = fileHandler.parseFileInfo(files);
 
         //파일이 존재할 때만 처리
             if(!imageList.isEmpty()){
                 for(Image image : imageList){
-                    post.addImage(imageRepository.save(image));
+                    imageRepository.save(image);
+//                    post.addImage(image);
                 }
             }
             postRepository.save(post);
