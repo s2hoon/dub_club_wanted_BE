@@ -29,7 +29,7 @@ public class Member {
     @Column
     private String role;
 
-    @OneToOne(mappedBy ="member")
+    @OneToOne(mappedBy = "member")
     private Club club;
 
 
