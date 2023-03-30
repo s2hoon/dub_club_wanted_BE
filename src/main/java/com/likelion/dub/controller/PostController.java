@@ -45,9 +45,6 @@ public class PostController {
     @PostMapping("/write-post")
     public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value="images", required = false)List<MultipartFile> files) throws BaseException {
         try {
-            log.info(dto.getClubName());
-
-
             postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), dto.getCategory(), files);
             return new BaseResponse<>("글 작성 성공");
         }
