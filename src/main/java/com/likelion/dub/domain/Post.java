@@ -31,7 +31,7 @@ public class Post {
 
     @OneToMany(
             mappedBy = "post",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+//            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
     private List<Image> image = new ArrayList<>();
@@ -47,6 +47,14 @@ public class Post {
             image.setPost(this);
     }
 
+    public static class PostBuilder {
+        private List<Image> image = new ArrayList<>();
+
+        public PostBuilder addImage(Image image) {
+            this.image.add(image);
+            return this;
+        }
 
 
+    }
 }
