@@ -47,6 +47,14 @@ public class Post {
             image.setPost(this);
     }
 
+    public static class PostBuilder {
+        private List<Image> image = new ArrayList<>();
+
+        public PostBuilder addImage(Image image) {
+            this.image.add(image);
+            return this;
+        }
 
 
+    }
 }

@@ -11,7 +11,6 @@ import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.repository.ImageRepository;
 import com.likelion.dub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +18,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PostService {
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
@@ -30,33 +28,34 @@ public class PostService {
         return this.postRepository.findAll();
     }
     public BaseResponse<String> writePost(String clubName,String title, String content,int category, List<MultipartFile> files) throws BaseException {
+        //이 club 이 없으면 작성 불가
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
-
                 });
 
-        Post post = Post.builder()
+        List<Image> imageList = fileHandler.parseFileInfo(files);
+        Post.PostBuilder postBuilder = Post.builder()
                 .clubName(clubName)
                 .title(title)
                 .content(content)
-                .category(category)
-                .build();
-        Post savedpost=postRepository.save(post);
-        List<Image> imageList = fileHandler.parseFileInfo(files, savedpost);
-        log.info(imageList.toString());
+                .category(category);
+
+        for (Image image : imageList) {
+            postBuilder.addImage(image);
+        }
+
+        Post post = postBuilder.build();
+
+
         //파일이 존재할 때만 처리
-            try {
-                if (!imageList.isEmpty()) {
-                    for (Image image : imageList) {
-                        post.addImage(imageRepository.save(image));
-                    }
+            if(!imageList.isEmpty()){
+                for(Image image : imageList){
+                    imageRepository.save(image);
+                    post.addImage(image);
                 }
             }
-            catch(NullPointerException e){
-                throw new BaseException(BaseResponseStatus.SAVE_TEMPORARY_FILE_FAILED);
-            }
-
+            postRepository.save(post);
         return new BaseResponse<>("글 작성 성공");
     }
 

@@ -57,6 +57,7 @@ public class FileHandler {
                 // 파일의 확장자 추출
                 String originalFileExtension;
                 String contentType = multipartFile.getContentType();
+                log.info(contentType);
 
                 // 확장자명이 존재하지 않을 경우 처리 x
                 if(ObjectUtils.isEmpty(contentType)) {

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "file")
+@Table(name = "image")
 public class Image {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -16,6 +16,7 @@ public class Image {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @Column
