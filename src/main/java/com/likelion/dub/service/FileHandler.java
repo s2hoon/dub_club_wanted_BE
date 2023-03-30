@@ -1,6 +1,7 @@
 package com.likelion.dub.service;
 
 import com.likelion.dub.domain.Image;
+import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.ImageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class FileHandler {
     private final ImageService imageService;
-    public List<Image> parseFileInfo(List<MultipartFile> multipartFiles) throws RuntimeException{
+    public List<Image> parseFileInfo(List<MultipartFile> multipartFiles, Post post) throws RuntimeException{
         List<Image> filelist = new ArrayList<>();
         if(!CollectionUtils.isEmpty(multipartFiles)) {
             // 파일명을 업로드 한 날짜로 변환하여 저장
@@ -86,7 +87,11 @@ public class FileHandler {
                         imageDto.getFilePath(),
                         imageDto.getFileSize()
                 );
-
+                photo.setPost(post);
+                log.info(photo.getFilePath());
+                log.info(photo.getOrigFileName());
+                log.info(photo.getFileSize().toString());
+                log.info(photo.getPost().toString());
                 // 생성 후 리스트에 추가
                 filelist.add(photo);
 

@@ -11,6 +11,7 @@ import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.repository.ImageRepository;
 import com.likelion.dub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
@@ -40,15 +42,21 @@ public class PostService {
                 .content(content)
                 .category(category)
                 .build();
-        List<Image> imageList = fileHandler.parseFileInfo(files);
-
+        Post savedpost=postRepository.save(post);
+        List<Image> imageList = fileHandler.parseFileInfo(files, savedpost);
+        log.info(imageList.toString());
         //파일이 존재할 때만 처리
-            if(!imageList.isEmpty()){
-                for(Image image : imageList){
-                    post.addImage(imageRepository.save(image));
+            try {
+                if (!imageList.isEmpty()) {
+                    for (Image image : imageList) {
+                        post.addImage(imageRepository.save(image));
+                    }
                 }
             }
-            postRepository.save(post);
+            catch(NullPointerException e){
+                throw new BaseException(BaseResponseStatus.SAVE_TEMPORARY_FILE_FAILED);
+            }
+
         return new BaseResponse<>("글 작성 성공");
     }
 
