@@ -34,19 +34,25 @@ public class PostService {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
                 });
 
-
-        Post post = Post.builder()
+        List<Image> imageList = fileHandler.parseFileInfo(files);
+        Post.PostBuilder postBuilder = Post.builder()
                 .clubName(clubName)
                 .title(title)
                 .content(content)
-                .category(category)
-                .build();
-        List<Image> imageList = fileHandler.parseFileInfo(files);
+                .category(category);
+
+        for (Image image : imageList) {
+            postBuilder.addImage(image);
+        }
+
+        Post post = postBuilder.build();
+
 
         //파일이 존재할 때만 처리
             if(!imageList.isEmpty()){
                 for(Image image : imageList){
-                    post.addImage(imageRepository.save(image));
+                    imageRepository.save(image);
+                    post.addImage(image);
                 }
             }
             postRepository.save(post);
