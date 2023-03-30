@@ -29,6 +29,13 @@ public class Post {
     private String content;
 
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "club_id")
+    private Club club;
+
+
+
+
     @OneToMany(
             mappedBy = "post",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
