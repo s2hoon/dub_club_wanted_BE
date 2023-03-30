@@ -28,11 +28,12 @@ public class PostService {
         return this.postRepository.findAll();
     }
     public BaseResponse<String> writePost(String clubName,String title, String content,int category, List<MultipartFile> files) throws BaseException {
+        //이 club 이 없으면 작성 불가
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
-
                 });
+
 
         Post post = Post.builder()
                 .clubName(clubName)

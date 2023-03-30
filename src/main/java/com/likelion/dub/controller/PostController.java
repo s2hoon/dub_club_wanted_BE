@@ -7,6 +7,7 @@ import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.PostWritingRequest;
 import com.likelion.dub.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/app/post")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
+@Slf4j
 public class PostController {
     private final PostService postService;
 
@@ -43,6 +45,9 @@ public class PostController {
     @PostMapping("/write-post")
     public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value="images", required = false)List<MultipartFile> files) throws BaseException {
         try {
+            log.info(dto.getClubName());
+
+
             postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), dto.getCategory(), files);
             return new BaseResponse<>("글 작성 성공");
         }
