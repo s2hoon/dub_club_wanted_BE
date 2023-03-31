@@ -5,6 +5,7 @@ import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Image;
+import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
 import com.likelion.dub.exception.AppException;
 import com.likelion.dub.exception.Errorcode;
@@ -67,4 +68,19 @@ public class PostService {
         );
 
     }
+
+
+    public void deletePost(Long id) throws BaseException {
+        postRepository.findById(id);
+
+    }
+
+//    public Member loadMemberByEmail(String email) throws BaseException {
+//        Member selectedUser = postRepository.findByEmail(email)
+//                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
+//
+//        return selectedUser;
+//
+//    }
+
 }

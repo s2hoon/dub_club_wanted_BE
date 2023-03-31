@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Member;
+import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.PostEditRequest;
 import com.likelion.dub.domain.dto.PostWritingRequest;
@@ -11,6 +13,8 @@ import com.likelion.dub.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +33,7 @@ public class PostController {
 
     /**
      * 동아리 글 전체 조회
+     *
      * @param
      * @return all post
      */
@@ -40,30 +45,57 @@ public class PostController {
 
     /**
      * post 작성
+     *
      * @param dto
      * @return
      */
 
     @PostMapping("/write-post")
-    public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value="images", required = false)List<MultipartFile> files) throws BaseException {
+    public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "images", required = false) List<MultipartFile> files) throws BaseException {
         try {
             postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), dto.getCategory(), files);
             return new BaseResponse<>("글 작성 성공");
-        }
-        catch(BaseException e){
+        } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }
     }
 
     /**
      * post 보기
+     *
      * @param id
      * @return
      */
     @GetMapping("/read-post")
-    public BaseResponse<Post> readPost(@RequestParam(value= "id", required = true) Long id) throws BaseException {
+    public BaseResponse<Post> readPost(@RequestParam(value = "id", required = true) Long id) throws BaseException {
         return new BaseResponse<>(postService.readPost(id));
     }
+
+
+//    @DeleteMapping("delete-post")
+//    public BaseResponse<String> deletePost(@RequestParam Long id) throws BaseException {
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        //jwt token 오류
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+//        }
+//        String email = authentication.getName();
+//        Member member = postService.loadMemberByEmail(email);
+//        String clubName = member.getUsername();
+//
+//        postService.deletePost(clubName);
+//
+//
+//
+//
+//
+//
+//
+//
+//        String result = "동아리 게시글 삭제 완료";
+//        return new BaseResponse<>(result);
+//    }
     @PutMapping("/edit")
     public BaseResponse<String> editPost(@RequestBody PostEditRequest dto) throws BaseException{
         String newTitle = dto.getTitle();
