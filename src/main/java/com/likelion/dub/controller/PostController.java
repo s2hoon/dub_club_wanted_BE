@@ -96,12 +96,21 @@ public class PostController {
 //        String result = "동아리 게시글 삭제 완료";
 //        return new BaseResponse<>(result);
 //    }
-    @PutMapping("/edit")
+    @PutMapping("/edit-post")
     public BaseResponse<String> editPost(@RequestBody PostEditRequest dto) throws BaseException{
         String newTitle = dto.getTitle();
         String newContent = dto.getContent();
         int newCategory = dto.getCategory();
-        return new BaseResponse<>("여기 해야됨");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //jwt token 오류
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        }
+        String email = authentication.getName();
+
+        postService.editPost(email, newTitle, newContent, newCategory);
+
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 }
 

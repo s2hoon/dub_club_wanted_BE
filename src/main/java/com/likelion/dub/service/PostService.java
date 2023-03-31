@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Image;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
+import com.likelion.dub.domain.dto.PostEditRequest;
 import com.likelion.dub.exception.AppException;
 import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.repository.ImageRepository;
+import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
+    private final MemberRepository memberRepository;
     private final FileHandler fileHandler;
 
 
@@ -74,6 +78,20 @@ public class PostService {
         postRepository.findById(id);
 
     }
+
+    public void editPost(String email, String newTitle, String newContent, int newCategory) throws BaseException {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        String clubName = member.getClub().getClubName();
+        Post post = postRepository.findByClubName(clubName)
+                .orElseThrow(()-> new BaseException(BaseResponseStatus.FAILED_GET_POST));
+        post.setTitle(newTitle);
+        post.setContent(newContent);
+        post.setCategory(newCategory);
+        postRepository.save(post);
+
+    }
+
 
 //    public Member loadMemberByEmail(String email) throws BaseException {
 //        Member selectedUser = postRepository.findByEmail(email)

@@ -32,7 +32,7 @@ public class Club {
     @Column
     private String clubName;
 
-    @OneToOne(mappedBy = "club")
+    @OneToOne(fetch=FetchType.LAZY)
     private Post post;
 
 

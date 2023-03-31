@@ -15,5 +15,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByClubName(String clubName);
     Optional<Post> findById(Long id);
 
-//    Optional<Member> findByEmail(String email);
+    // Optional<Member> findByEmail(String email);
 }
