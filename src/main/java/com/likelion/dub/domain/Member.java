@@ -21,7 +21,7 @@ public class Member {
     @Column
     private String email;
     @Column
-    private String username;
+    private String name;
     @Column
     private String password;
     @Column
@@ -29,9 +29,14 @@ public class Member {
     @Column
     private String role;
 
+
+
     @OneToOne(mappedBy = "member")
     private Club club;
 
 
+    public void setClub(Club club) {
+        this.club = club;
+    }
 
 }

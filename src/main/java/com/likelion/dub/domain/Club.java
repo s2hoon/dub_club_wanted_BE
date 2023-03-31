@@ -36,7 +36,7 @@ public class Club {
     private Post post;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -47,6 +47,12 @@ public class Club {
     cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
     orphanRemoval = true)
     private ClubImage clubImage;
+
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.setClub(this);
+    }
 
 
 }
