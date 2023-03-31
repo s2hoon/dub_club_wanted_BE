@@ -23,17 +23,36 @@ public class Club {
     private Long id;
 
     @Column
-    private String photo;
+    private String image;
 
     @Column
+    @Lob
     private String introduction;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @Column
+    private String clubName;
+
+    @OneToOne(mappedBy = "club")
+    private Post post;
+
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "club")
     private List<Tag> tags = new ArrayList<>();
+
+    @OneToOne(mappedBy = "club",
+    cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+    orphanRemoval = true)
+    private ClubImage clubImage;
+
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.setClub(this);
+    }
 
 
 }

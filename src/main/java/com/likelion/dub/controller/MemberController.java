@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.dto.MemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberLoginRequest;
 import com.likelion.dub.exception.AppException;
@@ -64,9 +65,9 @@ public class MemberController {
      * @return
      */
     @PostMapping("/sign-up")
-    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) throws BaseException{
+    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto ) throws BaseException{
             try {
-                memberService.join(dto.getEmail(), dto.getUsername(), dto.getPassword(), dto.getStunum(), dto.getRole());
+                memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getStunum(), dto.getRole());
                 String result = "회원 가입 완료";
                 return new BaseResponse<>(result);
             }

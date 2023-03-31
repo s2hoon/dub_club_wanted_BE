@@ -11,12 +11,15 @@ public class MemberJoinRequest {
     @JsonProperty
     private String email;
     @JsonProperty
-    private String username;
+    private String name;
     @JsonProperty
     private String password;
     @JsonProperty
     private Long stunum;
     @JsonProperty
     private String role;
+
+
+
 
 }
