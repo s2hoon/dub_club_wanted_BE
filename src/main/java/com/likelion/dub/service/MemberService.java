@@ -3,10 +3,13 @@ package com.likelion.dub.service;
 
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
+import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.Role;
 import com.likelion.dub.exception.AppException;
 import com.likelion.dub.exception.Errorcode;
+import com.likelion.dub.repository.ClubRepository;
 import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.utils.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,7 +31,12 @@ import static java.lang.Boolean.TRUE;
 @Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final ClubRepository clubRepository;
+
+
     private final BCryptPasswordEncoder encoder;
+
+
 
 
     @Value("${jwt.token.secret}")
@@ -48,24 +56,49 @@ public class MemberService {
     }
 
 
-    public void join(String email, String username, String password, Long stunum, String role) {
+    public void join(String email, String name, String password, Long stunum, String role) {
         //email 중복 check
         memberRepository.findByEmail(email)
                 .ifPresent(member -> {
-
                         throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
-
                 });
-        //저장
-        Member member = Member.builder()
-                .email(email)
-                .username(username)
-                .password(encoder.encode(password))
-                .stunum(stunum)
-                .role(role)
-                .build();
 
-        memberRepository.save(member);
+
+
+
+
+        //저장
+        if (role.equals("CLUB")) {
+
+            Club club = Club.builder()
+                    .clubName(name)
+                    .build();
+
+            Member member = Member.builder()
+                    .email(email)
+                    .password(encoder.encode(password))
+                    .stunum(stunum)
+                    .name(name)
+                    .role(role)
+                    .club(club)
+                    .build();
+
+            clubRepository.save(club);
+            memberRepository.save(member);
+
+
+        } else if (role.equals("USER")) {
+            Member member = Member.builder()
+                    .email(email)
+                    .password(encoder.encode(password))
+                    .stunum(stunum)
+                    .role(role)
+                    .name(name)
+                    .build();
+            memberRepository.save(member);
+        } else if (role.equals("ADMIN")) {
+            //admin 나중에 구현
+        }
 
 
     }
@@ -95,12 +128,5 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public boolean checkIdEquals(Authentication authentication, Long id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
-        return member.getUsername().equals(authentication.getName());
-
-
-    }
 }
 
