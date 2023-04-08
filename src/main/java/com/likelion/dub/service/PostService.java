@@ -46,7 +46,9 @@ public class PostService {
                 .title(title)
                 .content(content)
                 .category(category);
-
+        //Post post = Post.builder()
+        //          .clubName(clubName)
+        //          .image(imageList)
         for (Image image : imageList) {
             postBuilder.addImage(image);
         }
