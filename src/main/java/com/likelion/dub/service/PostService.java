@@ -8,6 +8,7 @@ import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Image;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
+import com.likelion.dub.domain.dto.PostEditRequest;
 import com.likelion.dub.exception.AppException;
 import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.repository.ImageRepository;
@@ -27,7 +28,6 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
-
     private final MemberRepository memberRepository;
     private final FileHandler fileHandler;
 
@@ -59,7 +59,9 @@ public class PostService {
                 .title(title)
                 .content(content)
                 .category(category);
-
+        //Post post = Post.builder()
+        //          .clubName(clubName)
+        //          .image(imageList)
         for (Image image : imageList) {
             postBuilder.addImage(image);
         }
@@ -90,9 +92,9 @@ public class PostService {
 
     public BaseResponse<String> deletePost(Long id) throws BaseException {
         // 저장 되어있는 post 가져오기
-        Post post = postRepository.findById(id).orElseThrow(()->
+        Post post = postRepository.findById(id).orElseThrow(() ->
                 new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
-        
+
         // 로그인 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //jwt token 오류
@@ -107,19 +109,41 @@ public class PostService {
         String clubName = member.getClub().getClubName();
         // 로그인 된 post
         Post member_post = postRepository.findByClubName(clubName).orElseThrow();
-        
-        
+
+
         //post id 가 같은지 검사, 같으면 삭제, 다르면 오류출력
         if (member_post.getId() == id) {
             postRepository.deleteById(id);
             return new BaseResponse<>("삭제 완료");
-        }
-        else{
+        } else {
             return new BaseResponse(BaseResponseStatus.INVALID_MEMBER_JWT);
         }
-
+    }
+    public void editPost(String email, String newTitle, String newContent, int newCategory, List<MultipartFile> newfiles) throws BaseException {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        String clubName = member.getClub().getClubName();
+        Post post = postRepository.findByClubName(clubName)
+                .orElseThrow(()-> new BaseException(BaseResponseStatus.FAILED_GET_POST));
+        List<Image> imageList = fileHandler.parseFileInfo(newfiles);
+        post.setTitle(newTitle);
+        post.setContent(newContent);
+        post.setCategory(newCategory);
+        post.setImage(imageList);
+        postRepository.save(post);
 
     }
 
 
-}
+//    public Member loadMemberByEmail(String email) throws BaseException {
+//        Member selectedUser = postRepository.findByEmail(email)
+//                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
+//
+//        return selectedUser;
+//
+//    }
+
+    }
+
+
+

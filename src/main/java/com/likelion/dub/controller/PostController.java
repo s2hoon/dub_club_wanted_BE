@@ -6,7 +6,9 @@ import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
+import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Post;
+import com.likelion.dub.domain.dto.PostEditRequest;
 import com.likelion.dub.domain.dto.PostWritingRequest;
 import com.likelion.dub.service.MemberService;
 import com.likelion.dub.service.PostService;
@@ -53,7 +55,7 @@ public class PostController {
     @PostMapping("/write-post")
     public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "images", required = false) List<MultipartFile> files) throws BaseException {
         try {
-            postService.writePost( dto.getTitle(), dto.getContent(), dto.getCategory(), files);
+            postService.writePost(dto.getTitle(), dto.getContent(), dto.getCategory(), files);
             return new BaseResponse<>("글 작성 성공");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());

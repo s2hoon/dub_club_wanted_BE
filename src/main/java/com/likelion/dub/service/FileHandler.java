@@ -1,6 +1,7 @@
 package com.likelion.dub.service;
 
 import com.likelion.dub.domain.Image;
+import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.ImageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +88,7 @@ public class FileHandler {
                         imageDto.getFilePath(),
                         imageDto.getFileSize()
                 );
+
 
                 // 생성 후 리스트에 추가
                 filelist.add(photo);
