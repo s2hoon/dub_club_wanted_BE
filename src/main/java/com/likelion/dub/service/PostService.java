@@ -4,32 +4,50 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Image;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
 import com.likelion.dub.exception.AppException;
 import com.likelion.dub.exception.Errorcode;
 import com.likelion.dub.repository.ImageRepository;
+import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
+
+    private final MemberRepository memberRepository;
     private final FileHandler fileHandler;
 
 
     public List<Post> getAllClubs() {
         return this.postRepository.findAll();
     }
-    public BaseResponse<String> writePost(String clubName,String title, String content,int category, List<MultipartFile> files) throws BaseException {
-        //이 club 이 없으면 작성 불가
+    public BaseResponse<String> writePost(String title, String content,int category, List<MultipartFile> files) throws BaseException {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //jwt token 오류
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        }
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Club club = member.getClub();
+        String clubName =  club.getClubName();
+
+        //이 club 글이 있으면 작성 불가
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
                         throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
