@@ -72,28 +72,12 @@ public class PostController {
     }
 
 
-//    @DeleteMapping("delete-post")
-//    public BaseResponse<String> deletePost(@RequestParam Long id) throws BaseException {
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        //jwt token 오류
-//        if (authentication == null || !authentication.isAuthenticated()) {
-//            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
-//        }
-//        String email = authentication.getName();
-//        Member member = postService.loadMemberByEmail(email);
-//        String clubName = member.getUsername();
-//
-//        postService.deletePost(clubName);
-//
-//
-//
-//
-//
-//
-//
-//
-//        String result = "동아리 게시글 삭제 완료";
-//        return new BaseResponse<>(result);
-//    }
+    @DeleteMapping("delete-post")
+    public BaseResponse<String> deletePost(@RequestParam(value="id",required = true) Long id) throws BaseException {
+        postService.deletePost(id);
+        String result = "동아리 게시글 삭제 완료";
+        return new BaseResponse<>(result);
+    }
+
+
 }
