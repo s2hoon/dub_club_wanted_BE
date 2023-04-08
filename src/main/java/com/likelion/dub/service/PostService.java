@@ -88,17 +88,38 @@ public class PostService {
     }
 
 
-    public void deletePost(Long id) throws BaseException {
-        postRepository.findById(id);
+    public BaseResponse<String> deletePost(Long id) throws BaseException {
+        // 저장 되어있는 post 가져오기
+        Post post = postRepository.findById(id).orElseThrow(()->
+                new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
+        
+        // 로그인 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //jwt token 오류
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        }
+        // 로그인 된 이메일
+        String email = authentication.getName();
+        // 로그인 된 멤버
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+        // 로그인 된 클럽
+        String clubName = member.getClub().getClubName();
+        // 로그인 된 post
+        Post member_post = postRepository.findByClubName(clubName).orElseThrow();
+        
+        
+        //post id 가 같은지 검사, 같으면 삭제, 다르면 오류출력
+        if (member_post.getId() == id) {
+            postRepository.deleteById(id);
+            return new BaseResponse<>("삭제 완료");
+        }
+        else{
+            return new BaseResponse(BaseResponseStatus.INVALID_MEMBER_JWT);
+        }
+
 
     }
 
-//    public Member loadMemberByEmail(String email) throws BaseException {
-//        Member selectedUser = postRepository.findByEmail(email)
-//                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
-//
-//        return selectedUser;
-//
-//    }
 
 }
