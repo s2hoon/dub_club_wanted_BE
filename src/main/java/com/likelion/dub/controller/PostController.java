@@ -80,6 +80,22 @@ public class PostController {
         String result = "동아리 게시글 삭제 완료";
         return new BaseResponse<>(result);
     }
+    @PutMapping("/edit-post")
+    public BaseResponse<String> editPost(@RequestPart(value="json") PostEditRequest dto, @RequestPart(value="images", required = false) List<MultipartFile> images) throws BaseException{
+        String newTitle = dto.getTitle();
+        String newContent = dto.getContent();
+        int newCategory = dto.getCategory();
+        List<MultipartFile> newImages = images;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //jwt token 오류
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        }
+        String email = authentication.getName();
 
+        postService.editPost(email, newTitle, newContent, newCategory, newImages);
+
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
 
 }
