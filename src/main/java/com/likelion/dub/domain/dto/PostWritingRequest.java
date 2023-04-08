@@ -12,15 +12,11 @@ import java.util.List;
 public class PostWritingRequest {
 
     @JsonProperty
-    private String clubName;
-    @JsonProperty
     private String title;
     @JsonProperty
     private String content;
-
     @JsonProperty
     private int category;
-
 
 
 

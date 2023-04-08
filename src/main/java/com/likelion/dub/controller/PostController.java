@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Post;
 import com.likelion.dub.domain.dto.PostEditRequest;
 import com.likelion.dub.domain.dto.PostWritingRequest;
+import com.likelion.dub.service.MemberService;
 import com.likelion.dub.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +55,7 @@ public class PostController {
     @PostMapping("/write-post")
     public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "images", required = false) List<MultipartFile> files) throws BaseException {
         try {
-            postService.writePost(dto.getClubName(), dto.getTitle(), dto.getContent(), dto.getCategory(), files);
+            postService.writePost(dto.getTitle(), dto.getContent(), dto.getCategory(), files);
             return new BaseResponse<>("글 작성 성공");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -72,46 +74,12 @@ public class PostController {
     }
 
 
-//    @DeleteMapping("delete-post")
-//    public BaseResponse<String> deletePost(@RequestParam Long id) throws BaseException {
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        //jwt token 오류
-//        if (authentication == null || !authentication.isAuthenticated()) {
-//            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
-//        }
-//        String email = authentication.getName();
-//        Member member = postService.loadMemberByEmail(email);
-//        String clubName = member.getUsername();
-//
-//        postService.deletePost(clubName);
-//
-//
-//
-//
-//
-//
-//
-//
-//        String result = "동아리 게시글 삭제 완료";
-//        return new BaseResponse<>(result);
-//    }
-    @PutMapping("/edit-post")
-    public BaseResponse<String> editPost(@RequestPart(value="json") PostEditRequest dto, @RequestPart(value="images", required = false) List<MultipartFile> images) throws BaseException{
-        String newTitle = dto.getTitle();
-        String newContent = dto.getContent();
-        int newCategory = dto.getCategory();
-        List<MultipartFile> newImages = images;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //jwt token 오류
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
-        }
-        String email = authentication.getName();
-
-        postService.editPost(email, newTitle, newContent, newCategory, newImages);
-
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    @DeleteMapping("delete-post")
+    public BaseResponse<String> deletePost(@RequestParam(value="id",required = true) Long id) throws BaseException {
+        postService.deletePost(id);
+        String result = "동아리 게시글 삭제 완료";
+        return new BaseResponse<>(result);
     }
-}
 
+
+}
