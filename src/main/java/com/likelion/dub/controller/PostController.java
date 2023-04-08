@@ -97,10 +97,11 @@ public class PostController {
 //        return new BaseResponse<>(result);
 //    }
     @PutMapping("/edit-post")
-    public BaseResponse<String> editPost(@RequestBody PostEditRequest dto) throws BaseException{
+    public BaseResponse<String> editPost(@RequestPart(value="json") PostEditRequest dto, @RequestPart(value="images", required = false) List<MultipartFile> images) throws BaseException{
         String newTitle = dto.getTitle();
         String newContent = dto.getContent();
         int newCategory = dto.getCategory();
+        List<MultipartFile> newImages = images;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //jwt token 오류
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -108,7 +109,7 @@ public class PostController {
         }
         String email = authentication.getName();
 
-        postService.editPost(email, newTitle, newContent, newCategory);
+        postService.editPost(email, newTitle, newContent, newCategory, newImages);
 
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -79,15 +80,17 @@ public class PostService {
 
     }
 
-    public void editPost(String email, String newTitle, String newContent, int newCategory) throws BaseException {
+    public void editPost(String email, String newTitle, String newContent, int newCategory, List<MultipartFile> newfiles) throws BaseException {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         String clubName = member.getClub().getClubName();
         Post post = postRepository.findByClubName(clubName)
                 .orElseThrow(()-> new BaseException(BaseResponseStatus.FAILED_GET_POST));
+        List<Image> imageList = fileHandler.parseFileInfo(newfiles);
         post.setTitle(newTitle);
         post.setContent(newContent);
         post.setCategory(newCategory);
+        post.setImage(imageList);
         postRepository.save(post);
 
     }

@@ -13,4 +13,5 @@ public class PostEditRequest {
     private String content;
     @JsonProperty
     private int category;
+
 }
