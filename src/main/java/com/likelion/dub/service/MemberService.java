@@ -57,15 +57,11 @@ public class MemberService {
 
 
     public void join(String email, String name, String password, Long stunum, String role) {
-        //email 중복 check
-        memberRepository.findByEmail(email)
-                .ifPresent(member -> {
-                        throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
-                });
-
-
-
-
+        // 중복 이메일 검사
+        Optional<Member> existingMember = memberRepository.findByEmail(email);
+        if (existingMember.isPresent()) {
+            throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+        }
 
         //저장
         if (role.equals("CLUB")) {
@@ -73,7 +69,7 @@ public class MemberService {
             Club club = Club.builder()
                     .clubName(name)
                     .build();
-
+            clubRepository.save(club);
             Member member = Member.builder()
                     .email(email)
                     .password(encoder.encode(password))
@@ -82,8 +78,7 @@ public class MemberService {
                     .role(role)
                     .club(club)
                     .build();
-
-            clubRepository.save(club);
+            club.setMember(member);
             memberRepository.save(member);
 
 
