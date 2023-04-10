@@ -1,10 +1,7 @@
 package com.likelion.dub.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @Getter
+@Setter
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +27,7 @@ public class Post {
     private String content;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy="post")
     @JoinColumn(name = "club_id")
     private Club club;
 
