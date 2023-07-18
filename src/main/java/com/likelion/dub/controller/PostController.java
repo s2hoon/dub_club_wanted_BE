@@ -1,5 +1,8 @@
 package com.likelion.dub.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
@@ -20,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import java.nio.file.Files;
 import java.util.List;
@@ -64,12 +68,15 @@ public class PostController {
 
 
     @PostMapping("/writing")
-    public BaseResponse<String> writing(@RequestPart(value = "json") PostWritingRequest dto) {
+    public BaseResponse<String> writing(@RequestPart(value = "json") JsonNode json) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            PostWritingRequest dto = objectMapper.treeToValue(json, PostWritingRequest.class);
+
             postService.writing(dto.getTitle(), dto.getContent(), dto.getCategory());
             return new BaseResponse<>("글 작성 성공");
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
+        } catch (BaseException | JsonProcessingException e) {
+            return new BaseResponse<>(e.getMessage());
         }
     }
     /**
