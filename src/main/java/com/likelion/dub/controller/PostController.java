@@ -69,7 +69,7 @@ public class PostController {
 
 
     @PostMapping("/writing")
-    public BaseResponse<String> writing(@RequestBody Map<String, Object> requestData) {
+    public BaseResponse<String> writing(@RequestPart(value="json") Map<String, Object> requestData) {
         try {
             String title = (String) requestData.get("title");
             String content = (String) requestData.get("content");
