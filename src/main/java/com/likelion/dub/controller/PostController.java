@@ -62,6 +62,16 @@ public class PostController {
         }
     }
 
+
+    @PostMapping("/writing")
+    public BaseResponse<String> writing(@RequestPart(value = "json") PostWritingRequest dto) {
+        try {
+            postService.writing(dto.getTitle(), dto.getContent(), dto.getCategory());
+            return new BaseResponse<>("글 작성 성공");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
     /**
      * post 보기
      *
@@ -70,6 +80,7 @@ public class PostController {
      */
     @GetMapping("/read-post")
     public BaseResponse<Post> readPost(@RequestParam(value = "id", required = true) Long id) throws BaseException {
+
         return new BaseResponse<>(postService.readPost(id));
     }
 

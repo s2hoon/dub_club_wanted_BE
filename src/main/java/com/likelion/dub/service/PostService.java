@@ -35,6 +35,37 @@ public class PostService {
     public List<Post> getAllClubs() {
         return this.postRepository.findAll();
     }
+
+
+    public BaseResponse<String> writing(String title, String content,int category)throws BaseException{
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //jwt token 오류
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        }
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Club club = member.getClub();
+        String clubName =  club.getClubName();
+
+        //이 club 글이 있으면 작성 불가
+        postRepository.findByClubName(clubName)
+                .ifPresent(post -> {
+                    throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
+                });
+
+        Post.PostBuilder postBuilder = Post.builder()
+                .clubName(clubName)
+                .title(title)
+                .content(content)
+                .category(category);
+
+
+        Post post = postBuilder.build();
+        postRepository.save(post);
+        return new BaseResponse<>("글 작성 성공");
+    }
     public BaseResponse<String> writePost(String title, String content,int category, List<MultipartFile> files) throws BaseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
