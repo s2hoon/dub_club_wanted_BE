@@ -17,6 +17,7 @@ import com.likelion.dub.service.MemberService;
 import com.likelion.dub.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,7 +58,7 @@ public class PostController {
      * @return
      */
 
-    @PostMapping("/write-post")
+    @PostMapping(value = "/write-post" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "images", required = false) List<MultipartFile> files) throws BaseException {
         try {
             postService.writePost(dto.getTitle(), dto.getContent(), dto.getCategory(), files);
@@ -68,7 +69,7 @@ public class PostController {
     }
 
 
-    @PostMapping("/writing")
+    @PostMapping(value = "/writing",consumes = {MediaType.APPLICATION_JSON_VALUE})
     public BaseResponse<String> writing(@RequestPart(value="json") Map<String, Object> requestData) {
         try {
             String title = (String) requestData.get("title");
