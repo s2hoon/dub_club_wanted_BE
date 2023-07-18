@@ -27,6 +27,7 @@ import springfox.documentation.spring.web.json.Json;
 
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/app/post")
@@ -68,14 +69,15 @@ public class PostController {
 
 
     @PostMapping("/writing")
-    public BaseResponse<String> writing(@RequestPart(value = "json") JsonNode json) {
+    public BaseResponse<String> writing(@RequestBody Map<String, Object> requestData) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            PostWritingRequest dto = objectMapper.treeToValue(json, PostWritingRequest.class);
+            String title = (String) requestData.get("title");
+            String content = (String) requestData.get("content");
+            int category = (int) requestData.get("category");
 
-            postService.writing(dto.getTitle(), dto.getContent(), dto.getCategory());
+            postService.writing(title, content, category);
             return new BaseResponse<>("글 작성 성공");
-        } catch (BaseException | JsonProcessingException e) {
+        } catch (Exception e) {
             return new BaseResponse<>(e.getMessage());
         }
     }
