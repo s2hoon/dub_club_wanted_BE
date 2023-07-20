@@ -1,5 +1,5 @@
 ## Dockerfile-dev
-FROM openjdk:19-jdk-alpine
+FROM openjdk:19-alpine
 EXPOSE 8080
 ARG JAR_FILE=/build/libs/dub-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
