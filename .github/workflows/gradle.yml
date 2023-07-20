@@ -89,7 +89,7 @@ jobs:
       if: contains(github.ref, 'main')
       with:
           host: ${{ secrets.HOST_PROD }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           envs: GITHUB_SHA
           script: |
