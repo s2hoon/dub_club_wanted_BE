@@ -24,6 +24,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("testcicd")
+    public BaseResponse<String> testcicd() {
+        return new BaseResponse<>("test complete");
+    }
+
+
     /**
      * 이메일 중복체크
      * @param email
@@ -32,13 +38,13 @@ public class MemberController {
     @GetMapping("/email/{email}")
     public BaseResponse<String> checkEmail(@PathVariable String email) {
 
-            boolean isEmailAvailable = memberService.checkEmail(email);
-            if (isEmailAvailable) {
-                String result = "이메일 사용 가능";
-                return new BaseResponse<>(result);
-            } else {
-                return new BaseResponse(BaseResponseStatus.EMAIL_ALREADY_EXIST);
-            }
+        boolean isEmailAvailable = memberService.checkEmail(email);
+        if (isEmailAvailable) {
+            String result = "이메일 사용 가능";
+            return new BaseResponse<>(result);
+        } else {
+            return new BaseResponse(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+        }
 
     }
 
