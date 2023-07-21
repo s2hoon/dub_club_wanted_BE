@@ -37,7 +37,7 @@ public class PostService {
     }
 
 
-    public BaseResponse<String> writing(String title, String content,int category)throws BaseException{
+    public BaseResponse<String> writing(String title, String content, int category) throws BaseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //jwt token 오류
@@ -47,7 +47,7 @@ public class PostService {
         String email = authentication.getName();
         Member member = memberRepository.findByEmail(email).orElseThrow();
         Club club = member.getClub();
-        String clubName =  club.getClubName();
+        String clubName = club.getClubName();
 
         //이 club 글이 있으면 작성 불가
         postRepository.findByClubName(clubName)
@@ -55,18 +55,11 @@ public class PostService {
                     throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
                 });
 
-        Post.PostBuilder postBuilder = Post.builder()
-                .clubName(clubName)
-                .title(title)
-                .content(content)
-                .category(category);
 
-
-        Post post = postBuilder.build();
-        postRepository.save(post);
         return new BaseResponse<>("글 작성 성공");
     }
-    public BaseResponse<String> writePost(String title, String content,int category, List<MultipartFile> files) throws BaseException {
+
+    public BaseResponse<String> writePost(String title, String content, int category, List<MultipartFile> files) throws BaseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //jwt token 오류
@@ -76,47 +69,24 @@ public class PostService {
         String email = authentication.getName();
         Member member = memberRepository.findByEmail(email).orElseThrow();
         Club club = member.getClub();
-        String clubName =  club.getClubName();
+        String clubName = club.getClubName();
 
         //이 club 글이 있으면 작성 불가
         postRepository.findByClubName(clubName)
                 .ifPresent(post -> {
-                        throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
+                    throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
                 });
 
-        List<Image> imageList = fileHandler.parseFileInfo(files);
-        Post.PostBuilder postBuilder = Post.builder()
-                .clubName(clubName)
-                .title(title)
-                .content(content)
-                .category(category);
-        //Post post = Post.builder()
-        //          .clubName(clubName)
-        //          .image(imageList)
-        for (Image image : imageList) {
-            postBuilder.addImage(image);
-        }
 
-        Post post = postBuilder.build();
-
-
-        //파일이 존재할 때만 처리
-            if(!imageList.isEmpty()){
-                for(Image image : imageList){
-                    imageRepository.save(image);
-                    post.addImage(image);
-                }
-            }
-            postRepository.save(post);
         return new BaseResponse<>("글 작성 성공");
     }
 
-    public Post readPost(Long id) throws BaseException{
+    public Post readPost(Long id) throws BaseException {
         return postRepository.findById(id)
                 .orElseThrow(() ->
                         new BaseException(BaseResponseStatus.NOT_EXISTS_POST)
 
-        );
+                );
 
     }
 
@@ -150,31 +120,10 @@ public class PostService {
             return new BaseResponse(BaseResponseStatus.INVALID_MEMBER_JWT);
         }
     }
-    public void editPost(String email, String newTitle, String newContent, int newCategory, List<MultipartFile> newfiles) throws BaseException {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
-        String clubName = member.getClub().getClubName();
-        Post post = postRepository.findByClubName(clubName)
-                .orElseThrow(()-> new BaseException(BaseResponseStatus.FAILED_GET_POST));
-        List<Image> imageList = fileHandler.parseFileInfo(newfiles);
-        post.setTitle(newTitle);
-        post.setContent(newContent);
-        post.setCategory(newCategory);
-        post.setImage(imageList);
-        postRepository.save(post);
-
-    }
 
 
-//    public Member loadMemberByEmail(String email) throws BaseException {
-//        Member selectedUser = postRepository.findByEmail(email)
-//                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
-//
-//        return selectedUser;
-//
-//    }
+}
 
-    }
 
 
 

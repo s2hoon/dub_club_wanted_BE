@@ -2,12 +2,17 @@ package com.likelion.dub.domain.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
+import java.util.List;
+
+@Data
 @AllArgsConstructor
-@Getter
-public class MemberJoinRequest {
+public class ClubMemberJoinRequest {
+
     @JsonProperty
     private String email;
     @JsonProperty
@@ -18,6 +23,16 @@ public class MemberJoinRequest {
     private String gender;
     @JsonProperty
     private String role;
+
+    @JsonProperty
+    private String groupName;
+
+    @JsonProperty
+    private String category;
+
+    @JsonProperty
+    @Lob
+    private String introduction;
 
 
 

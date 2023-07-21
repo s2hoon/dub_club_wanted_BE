@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Builder
@@ -12,10 +13,19 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name ="post")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+    @OneToOne(mappedBy = "post")
+    private Image image;
+
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
     @Column
     private String clubName;
@@ -27,39 +37,20 @@ public class Post {
     private String content;
 
 
-    @OneToOne(mappedBy="post")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
 
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
 
-    @OneToMany(
-            mappedBy = "post",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<Image> image = new ArrayList<>();
-
-    @Column
-    private int category;
-
-
-    public void addImage(Image image){
-        this.image.add(image);
-
-        if(image.getPost() != this)
-            image.setPost(this);
-    }
-
-    public static class PostBuilder {
-        private List<Image> image = new ArrayList<>();
-
-        public PostBuilder addImage(Image image) {
-            this.image.add(image);
-            return this;
-        }
-
+    public void setClub(Club club) {
+        this.club = club;
 
     }
+
+
 }

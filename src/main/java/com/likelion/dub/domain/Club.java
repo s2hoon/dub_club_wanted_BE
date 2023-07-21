@@ -2,10 +2,7 @@ package com.likelion.dub.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @Getter
+@Setter
+@Table(name = "club")
 public class Club {
 
     @Id
@@ -22,31 +21,29 @@ public class Club {
     @Column(name = "club_id")
     private Long id;
 
-    @Column
-    private String image;
 
-    @Column
-    @Lob
-    private String introduction;
+
+    @OneToMany(mappedBy = "club")
+    private List<Post> post = new ArrayList<>();
 
     @Column
     private String clubName;
 
-    @OneToOne(fetch=FetchType.LAZY)
-    private Post post;
+    @Column
+    @Lob
+    private String introduction;
+    @Column
+    private String groupName;
+    @Column
+    private String category;
 
+    @Lob
+    @Column
+    private byte[] clubImage;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @OneToMany(mappedBy = "club")
-    private List<Tag> tags = new ArrayList<>();
-
-    @OneToOne(mappedBy = "club",
-    cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-    orphanRemoval = true)
-    private ClubImage clubImage;
 
 
     public void setMember(Member member) {
@@ -54,5 +51,11 @@ public class Club {
         member.setClub(this);
     }
 
+
+
+    public void setPost(Post post) {
+        this.post.add(post);
+        post.setClub(this);
+    }
 
 }

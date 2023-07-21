@@ -47,7 +47,7 @@ public class MypageController {
             log.info(email.toString());
             log.info(member.toString());
 
-            MyPageResponse myPageResponse = new MyPageResponse(member.getEmail(), member.getName(), member.getStunum(), member.getRole());
+            MyPageResponse myPageResponse = new MyPageResponse(member.getEmail(), member.getName(), member.getRole());
             return new BaseResponse<>(myPageResponse);
         } catch (BaseException e) {
             return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);

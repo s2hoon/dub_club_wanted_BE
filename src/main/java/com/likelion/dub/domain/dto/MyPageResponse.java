@@ -14,8 +14,7 @@ public class MyPageResponse {
     private String email;
     @JsonProperty
     private String username;
-    @JsonProperty
-    private Long stunum;
+
     @JsonProperty
     private String role;
 

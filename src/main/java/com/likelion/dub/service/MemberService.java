@@ -3,27 +3,24 @@ package com.likelion.dub.service;
 
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.Club;
-import com.likelion.dub.domain.Member;
-import com.likelion.dub.domain.Post;
-import com.likelion.dub.domain.Role;
-import com.likelion.dub.exception.AppException;
-import com.likelion.dub.exception.Errorcode;
+import com.likelion.dub.domain.*;
+
 import com.likelion.dub.repository.ClubRepository;
 import com.likelion.dub.repository.MemberRepository;
+
 import com.likelion.dub.utils.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import java.util.Optional;
-
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 
 
 @RequiredArgsConstructor
@@ -33,8 +30,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
 
-
-    private final BCryptPasswordEncoder encoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
 
@@ -50,62 +46,83 @@ public class MemberService {
     }
 
 
-    public boolean checkStunum(Long stunum) {
-        Optional<Member> member = memberRepository.findByStunum(stunum);
-        return !member.isPresent();
-    }
 
-
-    public void join(String email, String name, String password, Long stunum, String role) {
+    /**
+     * 일반회원 회원가입
+     * @param email
+     * @param name
+     * @param password
+     * @param gender
+     * @param role
+     */
+    public void join(String email, String name, String password, String gender, String role) {
         // 중복 이메일 검사
         Optional<Member> existingMember = memberRepository.findByEmail(email);
         if (existingMember.isPresent()) {
             throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
         }
 
-        //저장
-        if (role.equals("CLUB")) {
-
-            Club club = Club.builder()
-                    .clubName(name)
-                    .build();
-            clubRepository.save(club);
-            Member member = Member.builder()
-                    .email(email)
-                    .password(encoder.encode(password))
-                    .stunum(stunum)
-                    .name(name)
-                    .role(role)
-                    .club(club)
-                    .build();
-            club.setMember(member);
-            memberRepository.save(member);
-
-
-        } else if (role.equals("USER")) {
-            Member member = Member.builder()
-                    .email(email)
-                    .password(encoder.encode(password))
-                    .stunum(stunum)
-                    .role(role)
-                    .name(name)
-                    .build();
-            memberRepository.save(member);
-        } else if (role.equals("ADMIN")) {
-            //admin 나중에 구현
-        }
-
+        Member member = new Member();
+        member.setEmail(email);
+        member.setName(name);
+        String hashedPassword = bCryptPasswordEncoder.encode(password);
+        member.setPassword(hashedPassword);
+        member.setGender(gender);
+        member.setRole(role);
+        memberRepository.save(member);
 
     }
 
+    /**
+     * 동아리장 회원가입
+     * @param email
+     * @param name
+     * @param password
+     * @param gender
+     * @param role
+     */
+    public void joinClub(String email, String name, String password, String gender, String role, String introduction, String groupName,String category , MultipartFile file)  {
+
+        // 중복 이메일 검사
+        Optional<Member> existingMember = memberRepository.findByEmail(email);
+        if (existingMember.isPresent()) {
+            throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
+        }
+        try {
+            Member member = new Member();
+            member.setEmail(email);
+            member.setName(name);
+            String hashedPassword = bCryptPasswordEncoder.encode(password);
+            member.setPassword(hashedPassword);
+            member.setGender(gender);
+            member.setRole(role);
+            memberRepository.save(member);
+
+            Club club = new Club();
+            club.setClubName(name);
+            club.setIntroduction(introduction);
+            club.setMember(member);
+            club.setGroupName(groupName);
+            club.setCategory(category);
+            if (file != null) {
+                club.setClubImage(file.getBytes());
+            }
+            clubRepository.save(club);
+            member.setClub(club);
+
+        } catch (IOException e) {
+            throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
+        }
+
+    }
 
     public String login(String email, String password) throws BaseException {
-        //email 없음
+        //email 중복확인
         Member selectedUser = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
 
         //비밀번호 틀림
-        if (!encoder.matches(password, selectedUser.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, selectedUser.getPassword())) {
             throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
         }
 

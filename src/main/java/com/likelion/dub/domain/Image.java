@@ -30,12 +30,7 @@ public class Image {
         this.fileSize = fileSize;
     }
 
-    public void setPost(Post post){
-        this.post = post;
 
-        if(!post.getImage().contains(this))
-            post.getImage().add(this);
-    }
 
     private Long fileSize;
 

@@ -114,7 +114,6 @@ public class PostController {
         }
         String email = authentication.getName();
 
-        postService.editPost(email, newTitle, newContent, newCategory, newImages);
 
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
