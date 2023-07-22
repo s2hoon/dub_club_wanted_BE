@@ -24,7 +24,7 @@ public class MemberController {
 
 
 
-    @GetMapping("/testRun")
+    @GetMapping("/testRaun")
     public BaseResponse<String> testRun() {
             return new BaseResponse(BaseResponseStatus.SUCCESS);
         }
