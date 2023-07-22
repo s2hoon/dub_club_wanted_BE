@@ -1,17 +1,13 @@
 package com.likelion.dub.service;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
+
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Club;
-import com.likelion.dub.domain.Image;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
-import com.likelion.dub.domain.dto.PostEditRequest;
-import com.likelion.dub.exception.AppException;
-import com.likelion.dub.exception.Errorcode;
-import com.likelion.dub.repository.ImageRepository;
+
 import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final ImageRepository imageRepository;
     private final MemberRepository memberRepository;
-    private final FileHandler fileHandler;
 
 
     public List<Post> getAllClubs() {

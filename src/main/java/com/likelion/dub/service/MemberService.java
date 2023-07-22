@@ -1,6 +1,8 @@
 package com.likelion.dub.service;
 
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.*;
@@ -8,7 +10,7 @@ import com.likelion.dub.domain.*;
 import com.likelion.dub.repository.ClubRepository;
 import com.likelion.dub.repository.MemberRepository;
 
-import com.likelion.dub.utils.JwtTokenUtil;
+import com.likelion.dub.configuration.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,10 @@ public class MemberService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
 
 
@@ -80,6 +86,10 @@ public class MemberService {
      * @param password
      * @param gender
      * @param role
+     * @param introduction
+     * @param groupName
+     * @param category
+     * @param file
      */
     public void joinClub(String email, String name, String password, String gender, String role, String introduction, String groupName,String category , MultipartFile file)  {
 
@@ -89,6 +99,7 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
         }
         try {
+            // 멤버 저장
             Member member = new Member();
             member.setEmail(email);
             member.setName(name);
@@ -97,7 +108,7 @@ public class MemberService {
             member.setGender(gender);
             member.setRole(role);
             memberRepository.save(member);
-
+            // 동아리 저장
             Club club = new Club();
             club.setClubName(name);
             club.setIntroduction(introduction);
@@ -105,9 +116,17 @@ public class MemberService {
             club.setGroupName(groupName);
             club.setCategory(category);
             if (file != null) {
-                club.setClubImage(file.getBytes());
+                // 프로필 사진 S3에 저장
+                Long memberId = member.getId();
+                String fileName = memberId + "ClubImage";
+                ObjectMetadata metadata= new ObjectMetadata();
+                metadata.setContentType(file.getContentType());
+                metadata.setContentLength(file.getSize());
+                amazonS3Client.putObject(bucket,fileName,file.getInputStream(),metadata);
+                club.setClubImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
             }
             clubRepository.save(club);
+            // 양방향 연관관계설정
             member.setClub(club);
 
         } catch (IOException e) {

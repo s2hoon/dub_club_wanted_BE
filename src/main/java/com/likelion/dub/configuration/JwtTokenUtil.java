@@ -1,4 +1,4 @@
-package com.likelion.dub.utils;
+package com.likelion.dub.configuration;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;

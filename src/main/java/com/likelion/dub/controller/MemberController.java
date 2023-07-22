@@ -6,7 +6,6 @@ import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.dto.ClubMemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberLoginRequest;
-import com.likelion.dub.domain.dto.PostWritingRequest;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/app/member")
@@ -23,11 +21,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-
-    @GetMapping("/testcicd")
-    public ResponseEntity<String> testcicd() {
-        return ResponseEntity.ok().body("test 성공");
-    }
 
 
     /**

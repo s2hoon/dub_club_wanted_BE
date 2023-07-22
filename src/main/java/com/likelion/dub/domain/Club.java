@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+
 @NoArgsConstructor
 @Entity
 @AllArgsConstructor
@@ -37,9 +37,8 @@ public class Club {
     @Column
     private String category;
 
-    @Lob
     @Column
-    private byte[] clubImage;
+    private String clubImage;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

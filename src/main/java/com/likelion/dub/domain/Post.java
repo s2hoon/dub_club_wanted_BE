@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Builder
+
 @NoArgsConstructor
 @Entity
 @AllArgsConstructor
@@ -18,11 +18,6 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
-    @OneToOne(mappedBy = "post")
-    private Image image;
-
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
@@ -35,6 +30,9 @@ public class Post {
     @Column
     @Lob
     private String content;
+
+    @Column
+    private String postImage;
 
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
