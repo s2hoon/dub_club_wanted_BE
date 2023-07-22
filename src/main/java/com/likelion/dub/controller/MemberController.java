@@ -23,6 +23,13 @@ public class MemberController {
     private final MemberService memberService;
 
 
+
+    @GetMapping("/testRun")
+    public BaseResponse<String> testRun() {
+            return new BaseResponse(BaseResponseStatus.SUCCESS);
+        }
+
+
     /**
      * 이메일 중복체크
      * @param email
