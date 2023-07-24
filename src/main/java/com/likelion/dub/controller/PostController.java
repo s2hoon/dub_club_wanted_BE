@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spring.web.json.Json;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
@@ -58,13 +59,17 @@ public class PostController {
      * @return
      */
 
+
+
     @PostMapping(value = "/write-post" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "images", required = false) List<MultipartFile> files) throws BaseException {
+    public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "image", required = false) MultipartFile file) throws BaseException {
         try {
-            postService.writePost(dto.getTitle(), dto.getContent(), dto.getCategory(), files);
+            postService.writePost(dto.getTitle(), dto.getContent(), file);
             return new BaseResponse<>("글 작성 성공");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
+        } catch (IOException e){
+            return new BaseResponse<>(e.getMessage());
         }
     }
 
