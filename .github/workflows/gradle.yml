@@ -93,7 +93,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           envs: GITHUB_SHA
           script: |
-              docker stop $(docker ps -a -q)
+              sudo docker stop dub
+              sudo docker rm dub
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/dub-prod
               sudo docker run -d -p 8080:8080 --name dub ${{ secrets.DOCKER_USERNAME }}/dub-prod
               sudo docker image prune -f
