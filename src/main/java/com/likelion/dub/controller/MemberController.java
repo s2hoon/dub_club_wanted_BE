@@ -3,6 +3,7 @@ package com.likelion.dub.controller;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.dto.ClubMemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberLoginRequest;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/app/member")
@@ -22,12 +25,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
-
-    @GetMapping("/testRraun")
-    public BaseResponse<String> testRun() {
-            return new BaseResponse(BaseResponseStatus.SUCCESS);
-        }
 
 
     /**
@@ -110,13 +107,6 @@ public class MemberController {
 
     }
 
-    /**
-     * test api
-     * @param dto
-     * @return
-     */
-    @PostMapping("/test")
-    public ResponseEntity<String> test(@RequestBody MemberJoinRequest dto) {
-        return ResponseEntity.ok().body("test 성공");
-    }
+
+
 }

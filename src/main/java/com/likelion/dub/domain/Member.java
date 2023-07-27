@@ -1,5 +1,6 @@
 package com.likelion.dub.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,8 @@ public class Member {
 
     @OneToOne(mappedBy = "member")
     private Club club;
+
+
 
     @OneToMany(mappedBy = "member")
     private List<Post> post = new ArrayList<>();

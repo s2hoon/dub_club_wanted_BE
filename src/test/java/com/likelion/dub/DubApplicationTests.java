@@ -3,10 +3,10 @@ package com.likelion.dub;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-//@SpringBootTest
+@SpringBootTest
 class DubApplicationTests {
 
-	//@Test
+	@Test
 	void contextLoads() {
 	}
 

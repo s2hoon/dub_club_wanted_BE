@@ -1,5 +1,6 @@
 package com.likelion.dub;
 
+import com.fasterxml.jackson.datatype.hibernate5.jakarta.Hibernate5JakartaModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -23,4 +24,13 @@ public class DubApplication {
 	public AuditorAware<String> auditorProvider() {
 		return () -> Optional.of(UUID.randomUUID().toString());
 	}
+
+	//프록시 객체 JSON 화
+//	@Bean
+//	public Hibernate5JakartaModule hibernate5JakartaModule() {
+//		Hibernate5JakartaModule hibernate5JakartaModule = new Hibernate5JakartaModule();
+//		return hibernate5JakartaModule;
+//	}
+
+
 }

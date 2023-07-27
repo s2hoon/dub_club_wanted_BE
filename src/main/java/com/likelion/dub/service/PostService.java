@@ -10,6 +10,8 @@ import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
 
+import com.likelion.dub.domain.dto.GetAllPostResponse;
+import com.likelion.dub.domain.dto.GetOnePostResponse;
 import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,45 +41,36 @@ public class PostService {
     private String bucket;
 
 
-    public List<Post> getAllClubs() {
-        return this.postRepository.findAll();
-    }
+    public List<GetAllPostResponse> getAllPost() {
 
-
-    public BaseResponse<String> writing(String title, String content, int category) throws BaseException {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //jwt token 오류
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
+        List<Post> allPosts = postRepository.findAll();
+        List<GetAllPostResponse> getAllPostResponses =new ArrayList<>();
+        for (Post allPost : allPosts) {
+            GetAllPostResponse getAllPostResponse = new GetAllPostResponse();
+            getAllPostResponse.setId(allPost.getId());
+            getAllPostResponse.setTitle(allPost.getTitle());
+            getAllPostResponse.setClubName(allPost.getClubName());
+            getAllPostResponses.add(getAllPostResponse);
         }
-        String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow();
-        Club club = member.getClub();
-        String clubName = club.getClubName();
-
-        //이 club 글이 있으면 작성 불가
-        postRepository.findByClubName(clubName)
-                .ifPresent(post -> {
-                    throw new BaseException(BaseResponseStatus.USERS_EMPTY_USER_ID);
-                });
-
-
-        return new BaseResponse<>("글 작성 성공");
+        return getAllPostResponses;
     }
 
 
-    public BaseResponse<String> writePost(String title, String content, MultipartFile file) throws BaseException, IOException {
+    public BaseResponse<String> writing(String title, String content, MultipartFile file) throws BaseException,IOException {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         Club club = member.getClub();
+        if (club == null) {
+            throw new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST);
+        }
         String clubName = club.getClubName();
-
         // post 객체 생성 및 db 에 저장
         Post post = new Post();
         post.setClubName(clubName);
         post.setClub(club);
+        post.setMember(member);
         post.setTitle(title);
         post.setContent(content);
         if (file != null) {
@@ -85,6 +80,37 @@ public class PostService {
             post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
         }
         postRepository.save(post);
+
+
+        return new BaseResponse<>("글 작성 성공");
+    }
+
+
+    public BaseResponse<String> writePost(String title, String content, MultipartFile file) throws BaseException, IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        Club club = member.getClub();
+        if (club == null) {
+            throw new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST);
+        }
+        String clubName = club.getClubName();
+        // post 객체 생성 및 db 에 저장
+        Post post = new Post();
+        post.setClubName(clubName);
+        post.setClub(club);
+        post.setMember(member);
+        post.setTitle(title);
+        post.setContent(content);
+        if (file != null) {
+            String fileName = member.getId() + "PostImage";
+            // 포스터 사진 S3에 저장
+            uploadPostImageToS3(fileName, file);
+            post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
+        }
+        postRepository.save(post);
+
+
         return new BaseResponse<>("글 작성 성공");
     }
 
@@ -96,12 +122,20 @@ public class PostService {
     }
 
 
-    public Post readPost(Long id) throws BaseException {
-        return postRepository.findById(id)
-                .orElseThrow(() ->
-                        new BaseException(BaseResponseStatus.NOT_EXISTS_POST)
+    public GetOnePostResponse readPost(Long id) throws BaseException {
+        Optional<Post> post = postRepository.findById(id);
+        GetOnePostResponse getOnePostResponse = new GetOnePostResponse();
+        getOnePostResponse.setClubName(post.get().getClubName());
+        getOnePostResponse.setTitle(post.get().getTitle());
+        getOnePostResponse.setContent(post.get().getContent());
+        getOnePostResponse.setPostImage(post.get().getPostImage());
 
-                );
+        List<String> comments = null;
+        getOnePostResponse.setComments(comments);
+
+        return getOnePostResponse;
+
+
 
     }
 

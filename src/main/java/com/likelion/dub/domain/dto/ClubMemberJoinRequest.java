@@ -20,6 +20,7 @@ public class ClubMemberJoinRequest {
     @JsonProperty
     private String password;
     @JsonProperty
+    @Nullable
     private String gender;
     @JsonProperty
     private String role;

@@ -64,7 +64,9 @@ public enum BaseResponseStatus {
     WRONG_PASSWORD(false, 3202, "잘못된 비밀번호입니다."),
     DISABLED_MEMBER(false, 3203, "탈퇴한 회원입니다."),
     STU_NUM_ALREADY_EXIST(false, 3204, "이미 가입된 학번 입니다."),
-    NO_SUCH_MEMBER_EXIST(false, 3303, "존재하지 않는 회원입니다."),
+    NO_SUCH_MEMBER_EXIST(false, 3203, "존재하지 않는 회원입니다."),
+
+    NO_SUCH_CLUB_EXIST(false, 3205, "존재하지 않는 동아리입니다."),
 
     // mypage
 

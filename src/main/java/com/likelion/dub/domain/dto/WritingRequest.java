@@ -1,26 +1,24 @@
 package com.likelion.dub.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
+
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @Getter
+@Setter
 @AllArgsConstructor
-public class PostWritingRequest {
+@NoArgsConstructor
+public class WritingRequest {
 
-
-    @JsonProperty
     private String title;
-
-    @Lob
-    @JsonProperty
     private String content;
 
+    @Nullable
+    private MultipartFile image;
 
 
 
