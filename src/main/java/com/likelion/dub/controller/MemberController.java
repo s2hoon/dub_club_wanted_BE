@@ -26,7 +26,6 @@ public class MemberController {
     private final MemberService memberService;
 
 
-
     /**
      * 이메일 중복체크
      * @param email
@@ -38,7 +37,7 @@ public class MemberController {
         boolean isEmailAvailable = memberService.checkEmail(email);
         if (isEmailAvailable) {
             String result = "이메일 사용 가능";
-            return new BaseResponse<>(result);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
         } else {
             return new BaseResponse(BaseResponseStatus.EMAIL_ALREADY_EXIST);
         }
@@ -47,17 +46,17 @@ public class MemberController {
 
 
     /**
-     * 일반회원 회원가입
+     * 일반회원가입
      * @param dto
      * @return
      */
     @PostMapping("/sign-up")
-    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto ) throws BaseException{
+    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto )  {
             try {
                 
                 memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole());
                 String result = "(일반)회원 가입 완료";
-                return new BaseResponse<>(result);
+                return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
             }
             catch(BaseException e){
                 return new BaseResponse(e.getStatus());
@@ -69,16 +68,15 @@ public class MemberController {
      * @param dto
      * @param file
      * @return
-     * @throws BaseException
      */
     @PostMapping(value = "/sign-up-club",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto, @RequestPart(value = "image", required = false) MultipartFile file) throws BaseException {
+    public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto, @RequestPart(value = "image", required = false) MultipartFile file)  {
 
         try {
             memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(),dto.getCategory(), file);
 
             String result = "(동아리)회원 가입 완료";
-            return new BaseResponse<>(result);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
 
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -86,9 +84,7 @@ public class MemberController {
     }
 
 
-
-    /**
-     * 로그인
+    /** 로그인
      * @param dto
      * @return
      */
@@ -97,13 +93,11 @@ public class MemberController {
 
         try {
             String token = memberService.login(dto.getEmail(), dto.getPassword());
-            return new BaseResponse<>("Bearer " + token);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS,"Bearer " + token);
 
         } catch (BaseException e) {
-            BaseResponseStatus result = e.getStatus();
-            return new BaseResponse(result);
+            return new BaseResponse(e.getStatus());
         }
-
 
     }
 

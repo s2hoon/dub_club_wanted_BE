@@ -48,7 +48,7 @@ public class MypageController {
             log.info(member.toString());
 
             MyPageResponse myPageResponse = new MyPageResponse(member.getEmail(), member.getName(), member.getRole());
-            return new BaseResponse<>(myPageResponse);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS,myPageResponse);
         } catch (BaseException e) {
             return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
         }
@@ -84,7 +84,7 @@ public class MypageController {
         mypageService.save(member);
 
         String result = "비밀번호 수정 완료";
-        return new BaseResponse<>(result);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
 
     }
 

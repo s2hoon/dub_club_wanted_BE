@@ -56,7 +56,7 @@ public class PostService {
     }
 
 
-    public BaseResponse<String> writing(String title, String content, MultipartFile file) throws BaseException,IOException {
+    public void writing(String title, String content, MultipartFile file) throws BaseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -73,20 +73,22 @@ public class PostService {
         post.setMember(member);
         post.setTitle(title);
         post.setContent(content);
-        if (file != null) {
-            String fileName = member.getId() + "PostImage";
-            // 포스터 사진 S3에 저장
-            uploadPostImageToS3(fileName, file);
-            post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
+        try {
+            if (file != null) {
+                String fileName = member.getId() + "PostImage";
+                // 포스터 사진 S3에 저장
+                uploadPostImageToS3(fileName, file);
+                post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
+            }
+        }catch(IOException e){
+            throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
         postRepository.save(post);
 
-
-        return new BaseResponse<>("글 작성 성공");
     }
 
 
-    public BaseResponse<String> writePost(String title, String content, MultipartFile file) throws BaseException, IOException {
+    public void writePost(String title, String content, MultipartFile file) throws BaseException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
@@ -111,7 +113,7 @@ public class PostService {
         postRepository.save(post);
 
 
-        return new BaseResponse<>("글 작성 성공");
+
     }
 
     private void uploadPostImageToS3(String fileName, MultipartFile file) throws IOException {
@@ -140,7 +142,7 @@ public class PostService {
     }
 
 
-    public BaseResponse<String> deletePost(Long id) throws BaseException {
+    public void deletePost(Long id) throws BaseException {
         // 저장 되어있는 post 가져오기
         Post post = postRepository.findById(id).orElseThrow(() ->
                 new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
@@ -149,7 +151,6 @@ public class PostService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //jwt token 오류
         if (authentication == null || !authentication.isAuthenticated()) {
-            return new BaseResponse(BaseResponseStatus.JWT_TOKEN_ERROR);
         }
         // 로그인 된 이메일
         String email = authentication.getName();
@@ -164,9 +165,9 @@ public class PostService {
         //post id 가 같은지 검사, 같으면 삭제, 다르면 오류출력
         if (member_post.getId() == id) {
             postRepository.deleteById(id);
-            return new BaseResponse<>("삭제 완료");
+
         } else {
-            return new BaseResponse(BaseResponseStatus.INVALID_MEMBER_JWT);
+
         }
     }
 

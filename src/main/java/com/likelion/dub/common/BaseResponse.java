@@ -21,26 +21,16 @@ public class BaseResponse<T> {
     // 해당 필드가 null인 경우 JSON에 표현되지 않는다.
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
-
     // 요청 성공
-    public BaseResponse(T result) {
-        this.isSuccess = SUCCESS.isSuccess();
-        this.code = SUCCESS.getCode();
-        this.message = SUCCESS.getMessage();
+    public BaseResponse(BaseResponseStatus status, T result) {
+        this(status);
         this.result = result;
     }
 
-    // 요청에 실패한 경우
+    // 요청 실패
     public BaseResponse(BaseResponseStatus status) {
         this.isSuccess = status.isSuccess();
         this.code = status.getCode();
         this.message = status.getMessage();
-    }
-
-    public BaseResponse(T result, BaseResponseStatus existsLike) {
-        this.isSuccess = existsLike.isSuccess();
-        this.code = existsLike.getCode();
-        this.message = existsLike.getMessage();
-        this.result = result;
     }
 }

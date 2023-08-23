@@ -28,18 +28,19 @@ public class PostController {
 
 
     /**
-     * 동아리 글 전체 조회
-     *
-     * @param
-     * @return all post
+     * 동아리글 전체 조회
+     * @return
      */
     @GetMapping("/getAll")
-    public BaseResponse<List<GetAllPostResponse>> getAllClubs() {
-        return new BaseResponse<>(postService.getAllPost());
-
+    public BaseResponse<List<GetAllPostResponse>> getAllPost() {
+        try{
+            List<GetAllPostResponse> getAllPostResponses = postService.getAllPost();
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS,getAllPostResponses);
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
-
-
+    
 //    /**
 //     * post 작성
 //     * @param dto
@@ -61,7 +62,7 @@ public class PostController {
 
 
     /**
-     * post 작성 test
+     * post 작성
      * @param writingRequest
      * @return
      */
@@ -72,33 +73,39 @@ public class PostController {
             String title =  writingRequest.getTitle();
             String content =  writingRequest.getContent();
             MultipartFile file = writingRequest.getImage();
-
             postService.writing(title, content, file);
-            return new BaseResponse<>("글 작성 성공");
-        } catch (Exception e) {
-            return new BaseResponse<>(e.getMessage());
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS,"글 작성 성공");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
         }
+
     }
     /**
      * post 보기
-     *
      * @param id
      * @return
      */
     @GetMapping("/read-post/{id}")
     public BaseResponse<GetOnePostResponse> readPost(@PathVariable Long id) throws BaseException {
-        return new BaseResponse<>(postService.readPost(id));
+
+        try{
+            GetOnePostResponse getOnePostResponse = postService.readPost(id);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, getOnePostResponse);
+        }catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+
     }
 
 
     @DeleteMapping("delete-post")
-    public BaseResponse<String> deletePost(@RequestParam(value="id") Long id) throws BaseException {
+    public BaseResponse<String> deletePost(@RequestParam(value="id") Long id)  {
         postService.deletePost(id);
         String result = "동아리 게시글 삭제 완료";
-        return new BaseResponse<>(result);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
     }
     @PutMapping("/edit-post")
-    public BaseResponse<String> editPost(@RequestPart(value="json") PostEditRequest dto, @RequestPart(value="images", required = false) List<MultipartFile> images) throws BaseException{
+    public BaseResponse<String> editPost(@RequestPart(value="json") PostEditRequest dto, @RequestPart(value="images", required = false) List<MultipartFile> images)  {
         String newTitle = dto.getTitle();
         String newContent = dto.getContent();
         int newCategory = dto.getCategory();
