@@ -85,8 +85,8 @@ public class PostController {
      * @param id
      * @return
      */
-    @GetMapping("/read-post")
-    public BaseResponse<GetOnePostResponse> readPost(@RequestParam(value="id") Long id) throws BaseException {
+    @GetMapping("/read-post/{id}")
+    public BaseResponse<GetOnePostResponse> readPost(@PathVariable Long id) throws BaseException {
         return new BaseResponse<>(postService.readPost(id));
     }
 
