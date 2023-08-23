@@ -56,7 +56,7 @@ class PostServiceTest {
         Club club = new Club(1L, null, "name", "introduction", "groupName", "category", "clubImage", member);
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Test file content.".getBytes());
         //when
-        postService.writePost("title", "content", file);
+        postService.writing("title", "content", file);
 
         //then
 

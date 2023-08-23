@@ -3,6 +3,7 @@ package com.likelion.dub.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
@@ -45,11 +46,12 @@ public class PostService {
 
         List<Post> allPosts = postRepository.findAll();
         List<GetAllPostResponse> getAllPostResponses =new ArrayList<>();
-        for (Post allPost : allPosts) {
+        for (Post post : allPosts) {
             GetAllPostResponse getAllPostResponse = new GetAllPostResponse();
-            getAllPostResponse.setId(allPost.getId());
-            getAllPostResponse.setTitle(allPost.getTitle());
-            getAllPostResponse.setClubName(allPost.getClubName());
+            getAllPostResponse.setId(post.getId());
+            getAllPostResponse.setTitle(post.getTitle());
+            getAllPostResponse.setClubName(post.getClubName());
+            getAllPostResponse.setClubImage(post.getClub().getClubImage());
             getAllPostResponses.add(getAllPostResponse);
         }
         return getAllPostResponses;
@@ -79,42 +81,14 @@ public class PostService {
                 // 포스터 사진 S3에 저장
                 uploadPostImageToS3(fileName, file);
                 post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
+                postRepository.save(post);
             }
         }catch(IOException e){
             throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
-        postRepository.save(post);
 
     }
 
-
-    public void writePost(String title, String content, MultipartFile file) throws BaseException, IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
-        Club club = member.getClub();
-        if (club == null) {
-            throw new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST);
-        }
-        String clubName = club.getClubName();
-        // post 객체 생성 및 db 에 저장
-        Post post = new Post();
-        post.setClubName(clubName);
-        post.setClub(club);
-        post.setMember(member);
-        post.setTitle(title);
-        post.setContent(content);
-        if (file != null) {
-            String fileName = member.getId() + "PostImage";
-            // 포스터 사진 S3에 저장
-            uploadPostImageToS3(fileName, file);
-            post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
-        }
-        postRepository.save(post);
-
-
-
-    }
 
     private void uploadPostImageToS3(String fileName, MultipartFile file) throws IOException {
         ObjectMetadata metadata = new ObjectMetadata();
@@ -125,12 +99,12 @@ public class PostService {
 
 
     public GetOnePostResponse readPost(Long id) throws BaseException {
-        Optional<Post> post = postRepository.findById(id);
+        Post post = postRepository.findById(id).orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
         GetOnePostResponse getOnePostResponse = new GetOnePostResponse();
-        getOnePostResponse.setClubName(post.get().getClubName());
-        getOnePostResponse.setTitle(post.get().getTitle());
-        getOnePostResponse.setContent(post.get().getContent());
-        getOnePostResponse.setPostImage(post.get().getPostImage());
+        getOnePostResponse.setClubName(post.getClubName());
+        getOnePostResponse.setTitle(post.getTitle());
+        getOnePostResponse.setContent(post.getContent());
+        getOnePostResponse.setPostImage(post.getPostImage());
 
         List<String> comments = null;
         getOnePostResponse.setComments(comments);

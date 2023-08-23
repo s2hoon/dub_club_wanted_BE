@@ -40,25 +40,6 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-    
-//    /**
-//     * post 작성
-//     * @param dto
-//     * @param file
-//     * @return
-//     * @throws BaseException
-//     */
-//    @PostMapping(value = "/write-post" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public BaseResponse<String> writePost(@RequestPart(value = "json") PostWritingRequest dto, @RequestPart(value = "image", required = false) MultipartFile file) throws BaseException {
-//        try {
-//            postService.writePost(dto.getTitle(), dto.getContent(), file);
-//            return new BaseResponse<>("글 작성 성공");
-//        } catch (BaseException e) {
-//            return new BaseResponse<>(e.getStatus());
-//        } catch (IOException e){
-//            return new BaseResponse<>(e.getMessage());
-//        }
-//    }
 
 
     /**
@@ -68,7 +49,7 @@ public class PostController {
      */
 
     @PostMapping(value = "/write-post",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BaseResponse<String> writing(@ModelAttribute WritingRequest writingRequest) {
+    public BaseResponse<String> writePost(@ModelAttribute WritingRequest writingRequest) {
         try {
             String title =  writingRequest.getTitle();
             String content =  writingRequest.getContent();

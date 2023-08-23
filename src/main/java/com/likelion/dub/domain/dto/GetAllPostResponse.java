@@ -16,4 +16,6 @@ public class GetAllPostResponse {
     private String title;
     private String clubName;
 
+    private String clubImage;
+
 }
