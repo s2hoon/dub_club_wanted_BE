@@ -32,30 +32,32 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-            log.info("authorization:{}", authorization);
+        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION); //요청 헤더에서 Authorization 헤더를 읽음
+        log.info("authorization:{}", authorization);
 
 
-        //token 안보내면 Block
+        //토큰이 없거나, Bearer token 이 아니면 종료
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-
-            log.error("No Token");
+            log.error("No Token or not Bearer token");
             filterChain.doFilter(request, response);
             return;
         }
         //token 꺼내기
         String token = authorization.split(" ")[1];
-        //token expired 여부
+        //token expired 면 종료
         if (JwtTokenUtil.isExpired(token, secretKey)) {
             log.error("token Expired");
             filterChain.doFilter(request, response);
             return;
-
         }
 
         //email Token 에서 꺼내기
         String email = JwtTokenUtil.getEmail(token, secretKey);
         log.info("email:{}", email);
+
+        //name Token 에서 꺼내기
+        String name = JwtTokenUtil.getName(token, secretKey);
+        log.info("name:{}", name);
 
         //role Token 에서 꺼내기
         String role = JwtTokenUtil.getRole(token, secretKey);

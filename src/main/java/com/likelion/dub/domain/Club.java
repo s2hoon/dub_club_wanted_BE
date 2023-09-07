@@ -40,6 +40,9 @@ public class Club {
     @Column
     private String clubImage;
 
+    @Column
+    private String form;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -49,8 +52,6 @@ public class Club {
         this.member = member;
         member.setClub(this);
     }
-
-
 
     public void setPost(Post post) {
         this.post.add(post);

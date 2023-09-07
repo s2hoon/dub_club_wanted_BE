@@ -42,15 +42,14 @@ public class SecurityConfig {
         return http
                 .httpBasic().disable()
                 .csrf().disable()
-                //.cors().and()
+                //.cors().and() // cors 활성화
                 .authorizeRequests()
                 .requestMatchers("/app/member/sign-up", "/app/member/sign-in", "/app/member/email/{email}", "/app/member/stunum/{stunum}","/app/post/getAll").permitAll() //누구나 접근 가능
-//                .requestMatchers(HttpMethod.POST, "/app/member/test").hasRole("ADMIN") //admin 권한 필요
-//                .requestMatchers(HttpMethod.POST, "/app/post/write-post").hasRole("CLUB") //CLUB 권한 필요
+                .requestMatchers( "/app/club/**").hasRole("CLUB") //CLUB 권한 필요
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 비활성화 -> restful api 기반 토큰 이므로 세션 필요x
                 .and()
                 .addFilterBefore(new JwtTokenFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();

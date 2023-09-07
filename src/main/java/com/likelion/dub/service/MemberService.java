@@ -140,15 +140,15 @@ public class MemberService {
 
     public String login(String email, String password) throws BaseException {
         //email 중복확인
-        Member selectedUser = memberRepository.findByEmail(email)
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
 
         //비밀번호 틀림
-        if (!bCryptPasswordEncoder.matches(password, selectedUser.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, member.getPassword())) {
             throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
         }
 
-        String token = JwtTokenUtil.createToken(selectedUser.getEmail(),selectedUser.getRole(), key, expireTimeMs);
+        String token = JwtTokenUtil.createToken(member.getEmail(),member.getRole(),member.getName(), key, expireTimeMs);
 
         return token;
     }

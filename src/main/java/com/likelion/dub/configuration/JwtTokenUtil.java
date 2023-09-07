@@ -18,6 +18,10 @@ public class JwtTokenUtil {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().get("email", String.class);
     }
+    public static String getName(String token, String secretKey) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+                .getBody().get("name", String.class);
+    }
 
 
     public static boolean isExpired(String token, String secretKey){
@@ -29,10 +33,11 @@ public class JwtTokenUtil {
      *
      JWT에서 claims는 사용자 정보를 담은 JSON 객체입니다. claims에는 고유한 ID, 발행자, 만료 시간, 사용자 이름 등이 포함될 수 있습니다.
      */
-    public static String createToken(String email,String role, String key, Long expireTimeMs) {
+    public static String createToken(String email,String role,String name, String key, Long expireTimeMs) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
         claims.put("role", role);
+        claims.put("name", name);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -41,6 +46,7 @@ public class JwtTokenUtil {
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
     }
+
 
 
 }

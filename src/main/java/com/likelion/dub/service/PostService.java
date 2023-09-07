@@ -46,6 +46,9 @@ public class PostService {
 
         List<Post> allPosts = postRepository.findAll();
         List<GetAllPostResponse> getAllPostResponses =new ArrayList<>();
+
+
+
         for (Post post : allPosts) {
             GetAllPostResponse getAllPostResponse = new GetAllPostResponse();
             getAllPostResponse.setId(post.getId());
