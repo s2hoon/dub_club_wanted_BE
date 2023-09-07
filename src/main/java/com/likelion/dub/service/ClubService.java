@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,10 +29,20 @@ public class ClubService {
         String email = authentication.getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         String clubName = member.getClub().getClubName();
-        // ClubName 이 존재하는지 확인
         Club club = clubRepository.findByClubName(clubName).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST));
         club.setForm(url);
         clubRepository.save(club);
 
     }
+
+    public void updateIntroduce(String introduction) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
+        String clubName = member.getClub().getClubName();
+        Club club = clubRepository.findByClubName(clubName).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST));
+        club.setIntroduction(introduction);
+        clubRepository.save(club);
+    }
+
 }

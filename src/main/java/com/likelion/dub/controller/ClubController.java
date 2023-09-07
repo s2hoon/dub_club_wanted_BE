@@ -18,7 +18,6 @@ public class ClubController {
     private final ClubService clubService;
 
 
-
     @PostMapping("/uploadForm")
     public BaseResponse<String> uploadForm(@RequestBody String url) {
         try {
@@ -31,4 +30,14 @@ public class ClubController {
 
     }
 
+    @PostMapping("/writeIntro")
+    public BaseResponse<String> writeInfo(@RequestBody String introduction) {
+        try {
+            clubService.updateIntroduce(introduction);
+            String result = "동아리 소개글 작성 완료";
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
