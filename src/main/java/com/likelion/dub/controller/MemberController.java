@@ -5,6 +5,7 @@ import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.dto.ClubMemberJoinRequest;
+import com.likelion.dub.domain.dto.GetMemberInfoResponse;
 import com.likelion.dub.domain.dto.MemberJoinRequest;
 import com.likelion.dub.domain.dto.MemberLoginRequest;
 import com.likelion.dub.service.MemberService;
@@ -28,6 +29,7 @@ public class MemberController {
 
     /**
      * 이메일 중복체크
+     *
      * @param email
      * @return
      */
@@ -37,7 +39,7 @@ public class MemberController {
         boolean isEmailAvailable = memberService.checkEmail(email);
         if (isEmailAvailable) {
             String result = "이메일 사용 가능";
-            return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
         } else {
             return new BaseResponse(BaseResponseStatus.EMAIL_ALREADY_EXIST);
         }
@@ -47,36 +49,37 @@ public class MemberController {
 
     /**
      * 일반회원가입
+     *
      * @param dto
      * @return
      */
     @PostMapping("/sign-up")
-    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto )  {
-            try {
-                
-                memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole());
-                String result = "(일반)회원 가입 완료";
-                return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
-            }
-            catch(BaseException e){
-                return new BaseResponse(e.getStatus());
-            }
+    public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) {
+        try {
+
+            memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole());
+            String result = "(일반)회원 가입 완료";
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
+        } catch (BaseException e) {
+            return new BaseResponse(e.getStatus());
+        }
     }
 
     /**
      * 동아리회원 회원가입
+     *
      * @param dto
      * @param file
      * @return
      */
-    @PostMapping(value = "/sign-up-club",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto, @RequestPart(value = "image", required = false) MultipartFile file)  {
+    @PostMapping(value = "/sign-up-club", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto, @RequestPart(value = "image", required = false) MultipartFile file) {
 
         try {
-            memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(),dto.getCategory(), file);
+            memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(), dto.getCategory(), file);
 
             String result = "(동아리)회원 가입 완료";
-            return new BaseResponse<>(BaseResponseStatus.SUCCESS,result);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
 
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -84,7 +87,9 @@ public class MemberController {
     }
 
 
-    /** 로그인
+    /**
+     * 로그인
+     *
      * @param dto
      * @return
      */
@@ -93,7 +98,7 @@ public class MemberController {
 
         try {
             String token = memberService.login(dto.getEmail(), dto.getPassword());
-            return new BaseResponse<>(BaseResponseStatus.SUCCESS,"Bearer " + token);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, "Bearer " + token);
 
         } catch (BaseException e) {
             return new BaseResponse(e.getStatus());
@@ -101,6 +106,16 @@ public class MemberController {
 
     }
 
+
+    @GetMapping("/getInfo")
+    public BaseResponse<GetMemberInfoResponse> getInfo() {
+        try {
+            GetMemberInfoResponse getMemberInfoResponse = memberService.getInfo();
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, getMemberInfoResponse);
+        } catch (BaseException e) {
+            return new BaseResponse(e.getStatus());
+        }
+    }
 
 
 }

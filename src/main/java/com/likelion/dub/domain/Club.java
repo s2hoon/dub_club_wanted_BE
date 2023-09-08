@@ -23,6 +23,8 @@ public class Club {
     private Long id;
 
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "club")
     private List<Post> post = new ArrayList<>();
 
@@ -43,6 +45,8 @@ public class Club {
     @Column
     private String form;
 
+
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

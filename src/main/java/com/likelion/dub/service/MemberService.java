@@ -7,6 +7,7 @@ import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.*;
 
+import com.likelion.dub.domain.dto.GetMemberInfoResponse;
 import com.likelion.dub.repository.ClubRepository;
 import com.likelion.dub.repository.MemberRepository;
 
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,9 +156,17 @@ public class MemberService {
     }
 
 
-    public void getInfo() {
-
-
+    public GetMemberInfoResponse getInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        GetMemberInfoResponse getMemberInfoResponse = new GetMemberInfoResponse();
+        getMemberInfoResponse.setName(member.getName());
+        getMemberInfoResponse.setGender(member.getGender());
+        getMemberInfoResponse.setRole(member.getRole());
+        getMemberInfoResponse.setEmail(member.getEmail());
+        getMemberInfoResponse.setClub(member.getClub());
+        return getMemberInfoResponse;
     }
 
 
