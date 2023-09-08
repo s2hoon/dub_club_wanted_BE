@@ -7,6 +7,7 @@ import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/app/club")
@@ -40,4 +41,16 @@ public class ClubController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @PostMapping("/uploadClubImage")
+    public BaseResponse<String> uploadClubImage(@ModelAttribute MultipartFile image) {
+        try {
+            clubService.updateClubImage(image);
+            String result = "동아리 사진 등록 완료";
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 }

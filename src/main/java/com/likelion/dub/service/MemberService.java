@@ -120,8 +120,7 @@ public class MemberService {
             club.setCategory(category);
             if (file != null) {
                 // 프로필 사진 S3에 저장
-                Long memberId = member.getId();
-                String fileName = memberId + "ClubImage";
+                String fileName = name + "_" + "ClubImage";
                 ObjectMetadata metadata= new ObjectMetadata();
                 metadata.setContentType(file.getContentType());
                 metadata.setContentLength(file.getSize());
