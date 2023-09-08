@@ -80,7 +80,7 @@ public class PostService {
         post.setContent(content);
         try {
             if (file != null) {
-                String fileName = member.getId() + "PostImage";
+                String fileName = clubName + "_" + "PostImage";
                 // 포스터 사진 S3에 저장
                 uploadPostImageToS3(fileName, file);
                 post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
