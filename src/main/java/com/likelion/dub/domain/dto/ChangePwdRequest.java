@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class PasswordRequest {
+public class ChangePwdRequest {
 
 
     @JsonProperty

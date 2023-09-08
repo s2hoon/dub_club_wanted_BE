@@ -4,10 +4,7 @@ import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Member;
-import com.likelion.dub.domain.dto.ClubMemberJoinRequest;
-import com.likelion.dub.domain.dto.GetMemberInfoResponse;
-import com.likelion.dub.domain.dto.MemberJoinRequest;
-import com.likelion.dub.domain.dto.MemberLoginRequest;
+import com.likelion.dub.domain.dto.*;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -29,7 +26,6 @@ public class MemberController {
 
     /**
      * 이메일 중복체크
-     *
      * @param email
      * @return
      */
@@ -49,7 +45,6 @@ public class MemberController {
 
     /**
      * 일반회원가입
-     *
      * @param dto
      * @return
      */
@@ -67,7 +62,6 @@ public class MemberController {
 
     /**
      * 동아리회원 회원가입
-     *
      * @param dto
      * @param file
      * @return
@@ -89,7 +83,6 @@ public class MemberController {
 
     /**
      * 로그인
-     *
      * @param dto
      * @return
      */
@@ -107,6 +100,10 @@ public class MemberController {
     }
 
 
+    /**
+     * 회원정보 조회
+     * @return
+     */
     @GetMapping("/getInfo")
     public BaseResponse<GetMemberInfoResponse> getInfo() {
         try {
@@ -118,4 +115,21 @@ public class MemberController {
     }
 
 
+    /**
+     * 비밀번호 수정
+     * @param changePwdRequest
+     * @return
+     */
+    @PutMapping("/changePwd")
+    public BaseResponse<String> changePwd(@RequestBody ChangePwdRequest changePwdRequest) {
+        try {
+            memberService.changePassword(changePwdRequest.getCurrentPassword(), changePwdRequest.getNewPassword());
+            String result = "비밀번호 수정 완료";
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
+        } catch (BaseException e) {
+            return new BaseResponse(e.getStatus());
+        }
+
+
+    }
 }

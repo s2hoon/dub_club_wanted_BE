@@ -170,12 +170,18 @@ public class MemberService {
     }
 
 
-    public void changePassword(Long id, String password) {
-
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with id " + id));
-        member.setPassword(password);
-        memberRepository.save(member);
+    public void changePassword(String currentPassword,String newPassword) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        if (bCryptPasswordEncoder.matches(currentPassword, member.getPassword())) {
+            // 비밀번호가 일치할 때 처리
+            String hashedPassword = bCryptPasswordEncoder.encode(newPassword);
+            member.setPassword(hashedPassword);
+            memberRepository.save(member);
+        } else {
+            throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
+        }
     }
 
 }
