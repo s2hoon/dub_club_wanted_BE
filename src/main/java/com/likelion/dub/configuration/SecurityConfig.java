@@ -44,9 +44,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 //.cors().and() // cors 활성화
                 .authorizeRequests()
-                .requestMatchers("/app/member/sign-up", "/app/member/sign-in", "/app/member/email/{email}", "/app/member/stunum/{stunum}","/app/post/getAll").permitAll() //누구나 접근 가능
-                .requestMatchers( "/app/club/**").hasRole("CLUB") //CLUB 권한 필요
-                .anyRequest().permitAll()
+                .requestMatchers("/app/post/write-post", "/app/post/delete-post", "/app/post/rewrite-post").hasRole("CLUB") // Post 작성 Club 권한 필요
+                .requestMatchers( "/app/club/**").hasRole("CLUB") // Club 에 관한거 CLUB 권한 필요
+                .anyRequest().permitAll() // 나머지는 누구나 접근가능
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 비활성화 -> restful api 기반 토큰 이므로 세션 필요x
