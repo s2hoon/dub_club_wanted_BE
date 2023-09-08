@@ -153,6 +153,12 @@ public class MemberService {
     }
 
 
+    public void getInfo() {
+
+
+    }
+
+
     public void changePassword(Long id, String password) {
 
         Member member = memberRepository.findById(id)
