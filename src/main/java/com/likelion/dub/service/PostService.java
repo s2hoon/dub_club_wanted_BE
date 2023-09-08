@@ -47,21 +47,20 @@ public class PostService {
         List<Post> allPosts = postRepository.findAll();
         List<GetAllPostResponse> getAllPostResponses =new ArrayList<>();
 
-
-
         for (Post post : allPosts) {
             GetAllPostResponse getAllPostResponse = new GetAllPostResponse();
             getAllPostResponse.setId(post.getId());
             getAllPostResponse.setTitle(post.getTitle());
             getAllPostResponse.setClubName(post.getClubName());
             getAllPostResponse.setClubImage(post.getClub().getClubImage());
+
             getAllPostResponses.add(getAllPostResponse);
         }
         return getAllPostResponses;
     }
 
 
-    public void writing(String title, String content, MultipartFile file) throws BaseException {
+    public void writing(String title, String content, MultipartFile image) throws BaseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -79,13 +78,14 @@ public class PostService {
         post.setTitle(title);
         post.setContent(content);
         try {
-            if (file != null) {
+            if (image != null) {
                 String fileName = clubName + "_" + "PostImage";
                 // 포스터 사진 S3에 저장
-                uploadPostImageToS3(fileName, file);
+                uploadPostImageToS3(fileName, image);
                 post.setPostImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
-                postRepository.save(post);
             }
+            postRepository.save(post);
+
         }catch(IOException e){
             throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
@@ -108,14 +108,10 @@ public class PostService {
         getOnePostResponse.setTitle(post.getTitle());
         getOnePostResponse.setContent(post.getContent());
         getOnePostResponse.setPostImage(post.getPostImage());
-
+        getOnePostResponse.setForm((post.getClub().getForm()));
         List<String> comments = null;
         getOnePostResponse.setComments(comments);
-
         return getOnePostResponse;
-
-
-
     }
 
 

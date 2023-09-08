@@ -25,4 +25,6 @@ public class GetOnePostResponse {
 
     private String postImage;
 
+    private String form;
+
 }
