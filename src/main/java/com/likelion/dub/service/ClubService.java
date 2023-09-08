@@ -77,4 +77,14 @@ public class ClubService {
 
     }
 
+    public void updateTag(String groupName, String category) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
+        Club club = member.getClub();
+        club.setGroupName(groupName);
+        club.setCategory(category);
+        clubRepository.save(club);
+    }
+
 }
