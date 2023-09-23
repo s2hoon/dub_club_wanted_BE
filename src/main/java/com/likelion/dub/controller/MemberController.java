@@ -3,11 +3,24 @@ package com.likelion.dub.controller;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.dto.*;
+import com.likelion.dub.domain.dto.ChangePwdRequest;
+import com.likelion.dub.domain.dto.ClubMemberJoinRequest;
+import com.likelion.dub.domain.dto.GetMemberInfoResponse;
+import com.likelion.dub.domain.dto.MemberJoinRequest;
+import com.likelion.dub.domain.dto.MemberLoginRequest;
+import com.likelion.dub.domain.dto.OAuth.KakaoLoginParams;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -96,6 +109,18 @@ public class MemberController {
         }
 
     }
+
+
+    @PostMapping("/loginKakao")
+    public BaseResponse<String> loginKakao(@RequestBody KakaoLoginParams params) {
+        try {
+            String token = memberService.loginKakao(params);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, "Bearer " + token);
+        } catch (BaseException e) {
+            return new BaseResponse(e.getStatus());
+        }
+    }
+
 
 
     /**

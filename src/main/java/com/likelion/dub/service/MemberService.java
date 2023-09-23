@@ -5,28 +5,26 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.*;
-
+import com.likelion.dub.configuration.JwtTokenUtil;
+import com.likelion.dub.domain.Club;
+import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.dto.GetMemberInfoResponse;
+import com.likelion.dub.domain.dto.OAuth.OAuthInfoResponse;
+import com.likelion.dub.domain.dto.OAuth.OAuthLoginParams;
+import com.likelion.dub.domain.dto.OAuth.RequestOAuthInfoService;
 import com.likelion.dub.repository.ClubRepository;
 import com.likelion.dub.repository.MemberRepository;
-
-import com.likelion.dub.configuration.JwtTokenUtil;
-import jakarta.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-
-import java.util.Optional;
 
 
 
@@ -41,6 +39,8 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final AmazonS3Client amazonS3Client;
+
+    private final RequestOAuthInfoService requestOAuthInfoService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -154,6 +154,29 @@ public class MemberService {
 
         return token;
     }
+
+
+
+    public String loginKakao(OAuthLoginParams params) {
+        OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
+        Long memberId = findOrCreateMember(oAuthInfoResponse);
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        return JwtTokenUtil.createToken(member.getEmail(),member.getRole(),member.getName(), key, expireTimeMs);
+    }
+
+    private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
+        return memberRepository.findByEmail(oAuthInfoResponse.getEmail())
+                .map(Member::getId)
+                .orElseGet(() -> newMember(oAuthInfoResponse));
+    }
+
+    private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
+        Member member = new Member();
+        member.setEmail(oAuthInfoResponse.getEmail());
+        member.setName(oAuthInfoResponse.getNickname());
+        return memberRepository.save(member).getId();
+    }
+
 
 
     public GetMemberInfoResponse getInfo() {
