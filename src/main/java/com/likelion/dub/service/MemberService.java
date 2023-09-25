@@ -11,7 +11,6 @@ import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.dto.GetMemberInfoResponse;
 import com.likelion.dub.domain.dto.OAuth.OAuthInfoResponse;
 import com.likelion.dub.domain.dto.OAuth.OAuthLoginParams;
-import com.likelion.dub.domain.dto.OAuth.RequestOAuthInfoService;
 import com.likelion.dub.repository.ClubRepository;
 import com.likelion.dub.repository.MemberRepository;
 import java.io.IOException;

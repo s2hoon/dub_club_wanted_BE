@@ -114,6 +114,7 @@ public class MemberController {
     @PostMapping("/loginKakao")
     public BaseResponse<String> loginKakao(@RequestBody KakaoLoginParams params) {
         try {
+            System.out.println(params.getAuthorizationCode());
             String token = memberService.loginKakao(params);
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "Bearer " + token);
         } catch (BaseException e) {

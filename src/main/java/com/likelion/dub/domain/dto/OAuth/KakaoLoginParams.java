@@ -3,12 +3,15 @@ package com.likelion.dub.domain.dto.OAuth;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class KakaoLoginParams implements OAuthLoginParams {
+
 
     private String authorizationCode;
 

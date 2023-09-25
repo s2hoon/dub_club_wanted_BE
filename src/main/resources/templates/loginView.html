@@ -1,11 +1,14 @@
-<!-- src/main/resources/templates/checkEmailView.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>loginView</title>
+    <title>My Spring-Thymeleaf Project</title>
 </head>
 <body>
-<p th:text="${result}"></p>
+<a href="https://kauth.kakao.com/oauth/authorize?client_id=7f3162e5e7ea72180f4d8a7494e6f05c&redirect_uri=http://localhost:8080/redirect&response_type=code">
+    <img height="38px" th:src="@{/image/kakao_login_medium_narrow.png}"/>
+</a>
+
+
 </body>
 </html>
