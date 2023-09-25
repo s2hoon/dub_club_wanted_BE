@@ -1,11 +1,40 @@
-<!-- src/main/resources/templates/checkEmailView.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>mainView</title>
+    <title>Title</title>
 </head>
 <body>
-<p th:text="${result}"></p>
+<!-- authorizationCode 값을 Thymeleaf를 사용하여 출력 -->
+<p th:text="${authorizationCode}"></p>
+<!--<script th:inline="javascript">-->
+<!--var authorizationCode = [[${authorizationCode}]];-->
+<!--// AJAX 요청을 보냅니다.-->
+<!--var xhr = new XMLHttpRequest();-->
+<!--xhr.open("POST", "http://localhost:8080/app/member/loginKakao");-->
+<!--xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");-->
+
+<!--xhr.onreadystatechange = function () {-->
+<!--if (xhr.readyState === 4) {-->
+<!--if (xhr.status === 200) {-->
+<!--// 성공적으로 API 응답을 받았을 때 처리할 내용-->
+<!--var response = JSON.parse(xhr.responseText);-->
+<!--console.log("API 응답: ", response);-->
+<!--} else {-->
+<!--// API 호출에 실패한 경우 처리할 내용-->
+<!--console.error("API 호출 실패");-->
+<!--}-->
+<!--}-->
+<!--};-->
+
+<!--// 요청 데이터 (params) 설정-->
+<!--var params = {-->
+<!--authorizationCode: authorizationCode-->
+<!--};-->
+
+<!--xhr.send(JSON.stringify(params));-->
+<!--console.log("API 요청: ", params);-->
+<!--</script>-->
 </body>
 </html>
