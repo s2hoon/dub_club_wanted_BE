@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 
-
-
 @RestController
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
@@ -37,6 +35,7 @@ public class MemberController {
 
     /**
      * 이메일 중복체크
+     *
      * @param email
      * @return
      */
@@ -56,6 +55,7 @@ public class MemberController {
 
     /**
      * 일반회원가입
+     *
      * @param dto
      * @return
      */
@@ -63,7 +63,8 @@ public class MemberController {
     public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) {
         try {
 
-            memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole());
+            memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(),
+                    dto.getRole());
             String result = "(일반)회원 가입 완료";
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
         } catch (BaseException e) {
@@ -73,15 +74,20 @@ public class MemberController {
 
     /**
      * 동아리회원 회원가입
+     *
      * @param dto
      * @param file
      * @return
      */
-    @PostMapping(value = "/sign-up-club", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto, @RequestPart(value = "image", required = false) MultipartFile file) {
+    @PostMapping(value = "/sign-up-club", consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE})
+    public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto,
+            @RequestPart(value = "image", required = false) MultipartFile file) {
 
         try {
-            memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(), dto.getCategory(), file);
+            memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(),
+                    dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(),
+                    dto.getCategory(), file);
 
             String result = "(동아리)회원 가입 완료";
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
@@ -94,6 +100,7 @@ public class MemberController {
 
     /**
      * 로그인
+     *
      * @param dto
      * @return
      */
@@ -110,7 +117,12 @@ public class MemberController {
 
     }
 
-
+    /**
+     * 카카오 로그인
+     *
+     * @param params
+     * @return
+     */
     @PostMapping("/loginKakao")
     public BaseResponse<String> loginKakao(@RequestBody KakaoLoginParams params) {
         try {
@@ -123,9 +135,9 @@ public class MemberController {
     }
 
 
-
     /**
      * 회원정보 조회
+     *
      * @return
      */
     @GetMapping("/getInfo")
@@ -141,13 +153,15 @@ public class MemberController {
 
     /**
      * 비밀번호 수정
+     *
      * @param changePwdRequest
      * @return
      */
     @PutMapping("/changePwd")
     public BaseResponse<String> changePwd(@RequestBody ChangePwdRequest changePwdRequest) {
         try {
-            memberService.changePassword(changePwdRequest.getCurrentPassword(), changePwdRequest.getNewPassword());
+            memberService.changePassword(changePwdRequest.getCurrentPassword(),
+                    changePwdRequest.getNewPassword());
             String result = "비밀번호 수정 완료";
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
         } catch (BaseException e) {
