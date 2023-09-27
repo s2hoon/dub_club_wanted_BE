@@ -24,7 +24,7 @@ public class JspController {
 
 
 
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String loginView() {
         return "loginView";
     }
