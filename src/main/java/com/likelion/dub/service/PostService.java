@@ -3,18 +3,18 @@ package com.likelion.dub.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
-import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
-
-import com.likelion.dub.domain.dto.GetAllPostResponse;
-import com.likelion.dub.domain.dto.GetOnePostResponse;
+import com.likelion.dub.domain.dto.Post.GetAllPostResponse;
+import com.likelion.dub.domain.dto.Post.GetOnePostResponse;
 import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class PostService {
+
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3Client amazonS3Client;
@@ -45,7 +41,7 @@ public class PostService {
     public List<GetAllPostResponse> getAllPost() {
 
         List<Post> allPosts = postRepository.findAll();
-        List<GetAllPostResponse> getAllPostResponses =new ArrayList<>();
+        List<GetAllPostResponse> getAllPostResponses = new ArrayList<>();
 
         for (Post post : allPosts) {
             GetAllPostResponse getAllPostResponse = new GetAllPostResponse();
@@ -64,7 +60,8 @@ public class PostService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         Club club = member.getClub();
         if (club == null) {
             throw new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST);
@@ -86,7 +83,7 @@ public class PostService {
             }
             postRepository.save(post);
 
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
 
@@ -102,7 +99,8 @@ public class PostService {
 
 
     public GetOnePostResponse readPost(Long id) throws BaseException {
-        Post post = postRepository.findById(id).orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
         GetOnePostResponse getOnePostResponse = new GetOnePostResponse();
         getOnePostResponse.setClubName(post.getClubName());
         getOnePostResponse.setTitle(post.getTitle());
@@ -133,7 +131,6 @@ public class PostService {
         String clubName = member.getClub().getClubName();
         // 로그인 된 post
         Post member_post = postRepository.findByClubName(clubName).orElseThrow();
-
 
         //post id 가 같은지 검사, 같으면 삭제, 다르면 오류출력
         if (member_post.getId() == id) {

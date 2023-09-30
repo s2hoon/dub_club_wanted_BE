@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Post;
 
 
 import jakarta.annotation.Nullable;
@@ -19,8 +19,6 @@ public class WritingRequest {
 
     @Nullable
     private MultipartFile image;
-
-
 
 
 }

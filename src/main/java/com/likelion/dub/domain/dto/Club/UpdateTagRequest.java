@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Club;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UpdateTagRequest {
+
     @JsonProperty
     private String groupName;
 

@@ -1,13 +1,11 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Post;
 
-import com.likelion.dub.domain.Comment;
 import jakarta.persistence.Lob;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Getter

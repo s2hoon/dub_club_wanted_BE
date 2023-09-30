@@ -1,17 +1,21 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PostEditRequest {
+public class PostWritingRequest {
+
+
     @JsonProperty
     private String title;
+
+    @Lob
     @JsonProperty
     private String content;
-    @JsonProperty
-    private int category;
+
 
 }

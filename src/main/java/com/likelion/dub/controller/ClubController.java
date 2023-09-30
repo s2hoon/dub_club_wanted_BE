@@ -1,14 +1,18 @@
 package com.likelion.dub.controller;
 
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.dto.UpdateTagRequest;
+import com.likelion.dub.domain.dto.Club.UpdateTagRequest;
 import com.likelion.dub.service.ClubService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -57,7 +61,7 @@ public class ClubController {
 
     @PostMapping("/updateTag")
     public BaseResponse<String> updateTag(@RequestBody UpdateTagRequest updateTagRequest) {
-        try{
+        try {
             clubService.updateTag(updateTagRequest.getGroupName(), updateTagRequest.getCategory());
             String result = "동아리 태그 등록 완료";
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);

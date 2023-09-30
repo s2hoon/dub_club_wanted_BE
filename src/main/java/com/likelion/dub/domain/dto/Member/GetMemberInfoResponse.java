@@ -1,8 +1,7 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Member;
 
 
 import com.likelion.dub.domain.Club;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GetMemberInfoResponse {
+
     private String email;
     private String name;
 

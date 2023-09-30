@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Post;
 
 
 import lombok.AllArgsConstructor;

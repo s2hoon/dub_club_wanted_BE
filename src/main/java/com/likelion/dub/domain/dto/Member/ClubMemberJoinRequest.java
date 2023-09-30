@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Member;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,8 +6,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -34,8 +32,6 @@ public class ClubMemberJoinRequest {
     @JsonProperty
     @Lob
     private String introduction;
-
-
 
 
 }

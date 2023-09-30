@@ -3,11 +3,11 @@ package com.likelion.dub.controller;
 import com.likelion.dub.common.BaseException;
 import com.likelion.dub.common.BaseResponse;
 import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.dto.ChangePwdRequest;
-import com.likelion.dub.domain.dto.ClubMemberJoinRequest;
-import com.likelion.dub.domain.dto.GetMemberInfoResponse;
-import com.likelion.dub.domain.dto.MemberJoinRequest;
-import com.likelion.dub.domain.dto.MemberLoginRequest;
+import com.likelion.dub.domain.dto.Member.ChangePwdRequest;
+import com.likelion.dub.domain.dto.Member.ClubMemberJoinRequest;
+import com.likelion.dub.domain.dto.Member.GetMemberInfoResponse;
+import com.likelion.dub.domain.dto.Member.MemberJoinRequest;
+import com.likelion.dub.domain.dto.Member.MemberLoginRequest;
 import com.likelion.dub.domain.dto.OAuth.KakaoLoginParams;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,6 @@ public class MemberController {
      */
     @GetMapping("/email/{email}")
     public BaseResponse<String> checkEmail(@PathVariable String email) {
-
         boolean isEmailAvailable = memberService.checkEmail(email);
         if (isEmailAvailable) {
             String result = "이메일 사용 가능";
@@ -62,7 +61,6 @@ public class MemberController {
     @PostMapping("/sign-up")
     public BaseResponse<String> join(@RequestBody MemberJoinRequest dto) {
         try {
-
             memberService.join(dto.getEmail(), dto.getName(), dto.getPassword(), dto.getGender(),
                     dto.getRole());
             String result = "(일반)회원 가입 완료";
@@ -83,7 +81,6 @@ public class MemberController {
             MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto,
             @RequestPart(value = "image", required = false) MultipartFile file) {
-
         try {
             memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(),
                     dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(),
@@ -106,7 +103,6 @@ public class MemberController {
      */
     @PostMapping("/sign-in")
     public BaseResponse<String> login(@RequestBody MemberLoginRequest dto) {
-
         try {
             String token = memberService.login(dto.getEmail(), dto.getPassword());
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "Bearer " + token);

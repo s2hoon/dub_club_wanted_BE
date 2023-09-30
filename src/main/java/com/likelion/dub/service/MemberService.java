@@ -8,7 +8,7 @@ import com.likelion.dub.common.BaseResponseStatus;
 import com.likelion.dub.configuration.JwtTokenUtil;
 import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
-import com.likelion.dub.domain.dto.GetMemberInfoResponse;
+import com.likelion.dub.domain.dto.Member.GetMemberInfoResponse;
 import com.likelion.dub.domain.dto.OAuth.OAuthInfoResponse;
 import com.likelion.dub.domain.dto.OAuth.OAuthLoginParams;
 import com.likelion.dub.repository.ClubRepository;
@@ -26,12 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
 
@@ -45,7 +45,6 @@ public class MemberService {
     private String bucket;
 
 
-
     @Value("${jwt.token.secret}")
     private String key;
     private Long expireTimeMs = 1000 * 60 * 60L; //1시간
@@ -57,9 +56,9 @@ public class MemberService {
     }
 
 
-
     /**
      * 일반회원 회원가입
+     *
      * @param email
      * @param name
      * @param password
@@ -86,6 +85,7 @@ public class MemberService {
 
     /**
      * 동아리장 회원가입
+     *
      * @param email
      * @param name
      * @param password
@@ -96,7 +96,8 @@ public class MemberService {
      * @param category
      * @param file
      */
-    public void joinClub(String email, String name, String password, String gender, String role, String introduction, String groupName,String category , MultipartFile file)  {
+    public void joinClub(String email, String name, String password, String gender, String role,
+            String introduction, String groupName, String category, MultipartFile file) {
 
         // 중복 이메일 검사
         Optional<Member> existingMember = memberRepository.findByEmail(email);
@@ -123,10 +124,10 @@ public class MemberService {
             if (file != null) {
                 // 프로필 사진 S3에 저장
                 String fileName = name + "_" + "ClubImage";
-                ObjectMetadata metadata= new ObjectMetadata();
+                ObjectMetadata metadata = new ObjectMetadata();
                 metadata.setContentType(file.getContentType());
                 metadata.setContentLength(file.getSize());
-                amazonS3Client.putObject(bucket,fileName,file.getInputStream(),metadata);
+                amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
                 club.setClubImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
             }
             clubRepository.save(club);
@@ -149,18 +150,19 @@ public class MemberService {
             throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
         }
 
-        String token = JwtTokenUtil.createToken(member.getEmail(),member.getRole(),member.getName(), key, expireTimeMs);
+        String token = JwtTokenUtil.createToken(member.getEmail(), member.getRole(),
+                member.getName(), key, expireTimeMs);
 
         return token;
     }
-
 
 
     public String loginKakao(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long memberId = findOrCreateMember(oAuthInfoResponse);
         Member member = memberRepository.findById(memberId).orElseThrow();
-        return JwtTokenUtil.createToken(member.getEmail(),member.getRole(),member.getName(), key, expireTimeMs);
+        return JwtTokenUtil.createToken(member.getEmail(), member.getRole(), member.getName(), key,
+                expireTimeMs);
     }
 
     private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
@@ -177,11 +179,11 @@ public class MemberService {
     }
 
 
-
     public GetMemberInfoResponse getInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         GetMemberInfoResponse getMemberInfoResponse = new GetMemberInfoResponse();
         getMemberInfoResponse.setName(member.getName());
         getMemberInfoResponse.setGender(member.getGender());
@@ -192,10 +194,11 @@ public class MemberService {
     }
 
 
-    public void changePassword(String currentPassword,String newPassword) {
+    public void changePassword(String currentPassword, String newPassword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         if (bCryptPasswordEncoder.matches(currentPassword, member.getPassword())) {
             // 비밀번호가 일치할 때 처리
             String hashedPassword = bCryptPasswordEncoder.encode(newPassword);

@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ public class ChangePwdRequest {
     private String currentPassword;
     @JsonProperty
     private String newPassword;
-
 
 
 }

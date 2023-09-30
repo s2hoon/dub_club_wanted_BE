@@ -1,7 +1,7 @@
 package com.likelion.dub.controller;
 
 
-import com.likelion.dub.domain.dto.MemberJoinRequest;
+import com.likelion.dub.domain.dto.Member.MemberJoinRequest;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,14 +23,14 @@ public class JspController {
     private final RestTemplate restTemplate;
 
 
-
     @RequestMapping("/login")
     public String loginView() {
         return "loginView";
     }
 
     @GetMapping("/redirect")
-    public String kakaoCallback(@RequestParam("code") String code, RedirectAttributes redirectAttributes) {
+    public String kakaoCallback(@RequestParam("code") String code,
+            RedirectAttributes redirectAttributes) {
         // code 값을 main 페이지로 전달
         redirectAttributes.addFlashAttribute("authorizationCode", code);
         return "redirect:/mainView"; // mainView 페이지로 리다이렉트

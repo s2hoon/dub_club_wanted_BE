@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto;
+package com.likelion.dub.domain.dto.Member;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MemberJoinRequest {
+
     @JsonProperty
     private String email;
     @JsonProperty
@@ -22,8 +23,6 @@ public class MemberJoinRequest {
     private String gender;
     @JsonProperty
     private String role;
-
-
 
 
 }
