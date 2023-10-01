@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto.OAuth;
+package com.likelion.dub.dto.OAuth;
 
 
 import lombok.AllArgsConstructor;
@@ -21,6 +21,7 @@ public class KakaoLoginParams implements OAuthLoginParams {
     public OAuthProvider oAuthProvider() {
         return OAuthProvider.KAKAO;
     }
+
     @Override
     public MultiValueMap<String, String> makeBody() {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();

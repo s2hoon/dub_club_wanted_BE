@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto.OAuth;
+package com.likelion.dub.dto.OAuth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +14,7 @@ public class KakaoInfoResponse implements OAuthInfoResponse {
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class KakaoAccount {
+
         private KakaoProfile profile;
         private String email;
     }
@@ -21,6 +22,7 @@ public class KakaoInfoResponse implements OAuthInfoResponse {
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class KakaoProfile {
+
         private String nickname;
     }
 

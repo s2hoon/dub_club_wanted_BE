@@ -1,4 +1,4 @@
-package com.likelion.dub.common;
+package com.likelion.dub.baseResponse;
 
 import lombok.Getter;
 
@@ -10,7 +10,6 @@ public enum BaseResponseStatus {
      */
     SUCCESS(true, 1000, "요청에 성공했습니다."),
 
-
     /**
      * 2XXX : Common
      */
@@ -21,7 +20,7 @@ public enum BaseResponseStatus {
     /**
      * 3XXX : Member
      */
-    INVALID_MEMBER_JWT(false,3000,"권한이 없는 회원의 접근입니다."),
+    INVALID_MEMBER_JWT(false, 3000, "권한이 없는 회원의 접근입니다."),
     EMPTY_PROFILE_IMAGE(false, 3001, "프로필 이미지를 입력해주세요."),
 
     JWT_TOKEN_ERROR(false, 3002, "jwt 토큰을 확인해주세요"),
@@ -35,21 +34,18 @@ public enum BaseResponseStatus {
     NO_SUCH_MEMBER_EXIST(false, 3008, "존재하지 않는 회원입니다."),
     NO_SUCH_CLUB_EXIST(false, 3009, "존재하지 않는 동아리입니다."),
 
-
     /**
      * 4XXX : Post
      */
-    NOT_EXISTS_POST(false,4000,"게시물이 존재하지 않습니다."),
-    FAILED_GET_POST(false,4001,"게시물 조회에 실패하였습니다."),
-    NOT_EXISTS_TAG_NAME_POST(true,4002,"해당 태그를 가진 게시물이 없습니다."),
+    NOT_EXISTS_POST(false, 4000, "게시물이 존재하지 않습니다."),
+    FAILED_GET_POST(false, 4001, "게시물 조회에 실패하였습니다."),
+    NOT_EXISTS_TAG_NAME_POST(true, 4002, "해당 태그를 가진 게시물이 없습니다."),
     DELETE_FAIL_POST(false, 4003, "게시물 삭제에 실패하였습니다.");
 
 
     /**
      * 5xxx: Mypage
      */
-
-
 
 
     private final boolean isSuccess;

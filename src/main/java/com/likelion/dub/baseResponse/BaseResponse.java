@@ -1,11 +1,9 @@
-package com.likelion.dub.common;
+package com.likelion.dub.baseResponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
-
-import static com.likelion.dub.common.BaseResponseStatus.SUCCESS;
 
 @Getter
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
@@ -21,6 +19,7 @@ public class BaseResponse<T> {
     // 해당 필드가 null인 경우 JSON에 표현되지 않는다.
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
+
     // 요청 성공
     public BaseResponse(BaseResponseStatus status, T result) {
         this(status);

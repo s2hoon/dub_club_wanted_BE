@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto.OAuth;
+package com.likelion.dub.dto.OAuth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

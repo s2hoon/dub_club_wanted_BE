@@ -1,14 +1,14 @@
 package com.likelion.dub.controller;
 
-import com.likelion.dub.common.BaseException;
-import com.likelion.dub.common.BaseResponse;
-import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.dto.Member.ChangePwdRequest;
-import com.likelion.dub.domain.dto.Member.ClubMemberJoinRequest;
-import com.likelion.dub.domain.dto.Member.GetMemberInfoResponse;
-import com.likelion.dub.domain.dto.Member.MemberJoinRequest;
-import com.likelion.dub.domain.dto.Member.MemberLoginRequest;
-import com.likelion.dub.domain.dto.OAuth.KakaoLoginParams;
+import com.likelion.dub.baseResponse.BaseException;
+import com.likelion.dub.baseResponse.BaseResponse;
+import com.likelion.dub.baseResponse.BaseResponseStatus;
+import com.likelion.dub.dto.Member.ChangePwdRequest;
+import com.likelion.dub.dto.Member.ClubMemberJoinRequest;
+import com.likelion.dub.dto.Member.GetMemberInfoResponse;
+import com.likelion.dub.dto.Member.MemberJoinRequest;
+import com.likelion.dub.dto.Member.MemberLoginRequest;
+import com.likelion.dub.dto.OAuth.KakaoLoginParams;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

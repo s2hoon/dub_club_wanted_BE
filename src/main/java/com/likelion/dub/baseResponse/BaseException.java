@@ -1,4 +1,4 @@
-package com.likelion.dub.common;
+package com.likelion.dub.baseResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -41,11 +41,19 @@
 
 ---
 
-# System Architecture
+# API 엔드포인트 목록 및 사용법
+
+https://woozy-cuticle-bfb.notion.site/dub_-wanted-5f89e6bcf87142eca927893ff04703f6?pvs=4
+
 
 ---
 
 # CI/CD Flow
+
+1. main branch 에 Push 또는 Merge
+2. Github 에 작성해둔 workflow file 로 Github Actions 수행
+3. build, docker image build, docker image push 수행
+4. EC2 인스턴스에서 docker image pull 후, run
 
 ---
 
@@ -53,6 +61,9 @@
 
 ![db설계 최종](https://github.com/s2hoon/dub_club_wanted_BE/assets/82464990/532c6e73-719f-4645-a798-1fe47da878c3)
 
+---
+
+# Project Structure
 
 ---
 

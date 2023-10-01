@@ -3,13 +3,13 @@ package com.likelion.dub.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.likelion.dub.common.BaseException;
-import com.likelion.dub.common.BaseResponseStatus;
+import com.likelion.dub.baseResponse.BaseException;
+import com.likelion.dub.baseResponse.BaseResponseStatus;
 import com.likelion.dub.domain.Club;
 import com.likelion.dub.domain.Member;
 import com.likelion.dub.domain.Post;
-import com.likelion.dub.domain.dto.Post.GetAllPostResponse;
-import com.likelion.dub.domain.dto.Post.GetOnePostResponse;
+import com.likelion.dub.dto.Post.GetAllPostResponse;
+import com.likelion.dub.dto.Post.GetOnePostResponse;
 import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
 import java.io.IOException;

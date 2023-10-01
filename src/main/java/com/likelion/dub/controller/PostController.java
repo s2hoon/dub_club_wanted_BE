@@ -1,12 +1,12 @@
 package com.likelion.dub.controller;
 
-import com.likelion.dub.common.BaseException;
-import com.likelion.dub.common.BaseResponse;
-import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.dto.Post.GetAllPostResponse;
-import com.likelion.dub.domain.dto.Post.GetOnePostResponse;
-import com.likelion.dub.domain.dto.Post.PostEditRequest;
-import com.likelion.dub.domain.dto.Post.WritingRequest;
+import com.likelion.dub.baseResponse.BaseException;
+import com.likelion.dub.baseResponse.BaseResponse;
+import com.likelion.dub.baseResponse.BaseResponseStatus;
+import com.likelion.dub.dto.Post.GetAllPostResponse;
+import com.likelion.dub.dto.Post.GetOnePostResponse;
+import com.likelion.dub.dto.Post.PostEditRequest;
+import com.likelion.dub.dto.Post.WritingRequest;
 import com.likelion.dub.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

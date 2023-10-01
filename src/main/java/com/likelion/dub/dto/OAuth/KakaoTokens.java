@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto.OAuth;
+package com.likelion.dub.dto.OAuth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

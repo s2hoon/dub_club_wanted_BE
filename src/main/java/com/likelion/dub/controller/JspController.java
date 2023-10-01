@@ -1,7 +1,7 @@
 package com.likelion.dub.controller;
 
 
-import com.likelion.dub.domain.dto.Member.MemberJoinRequest;
+import com.likelion.dub.dto.Member.MemberJoinRequest;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

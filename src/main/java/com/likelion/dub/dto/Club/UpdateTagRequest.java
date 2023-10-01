@@ -1,19 +1,19 @@
-package com.likelion.dub.domain.dto.Member;
+package com.likelion.dub.dto.Club;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
-public class MemberLoginRequest {
-
+@AllArgsConstructor
+public class UpdateTagRequest {
 
     @JsonProperty
-    private String email;
+    private String groupName;
+
     @JsonProperty
-    private String password;
+    private String category;
 
 
 }

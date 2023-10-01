@@ -1,4 +1,4 @@
-package com.likelion.dub.domain.dto.Member;
+package com.likelion.dub.dto.Member;
 
 
 import com.likelion.dub.domain.Club;

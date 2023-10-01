@@ -1,10 +1,10 @@
 package com.likelion.dub.controller;
 
 
-import com.likelion.dub.common.BaseException;
-import com.likelion.dub.common.BaseResponse;
-import com.likelion.dub.common.BaseResponseStatus;
-import com.likelion.dub.domain.dto.Club.UpdateTagRequest;
+import com.likelion.dub.baseResponse.BaseException;
+import com.likelion.dub.baseResponse.BaseResponse;
+import com.likelion.dub.baseResponse.BaseResponseStatus;
+import com.likelion.dub.dto.Club.UpdateTagRequest;
 import com.likelion.dub.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -1,9 +1,9 @@
 package com.likelion.dub.service;
 
-import com.likelion.dub.domain.dto.OAuth.OAuthApiClient;
-import com.likelion.dub.domain.dto.OAuth.OAuthInfoResponse;
-import com.likelion.dub.domain.dto.OAuth.OAuthLoginParams;
-import com.likelion.dub.domain.dto.OAuth.OAuthProvider;
+import com.likelion.dub.dto.OAuth.OAuthApiClient;
+import com.likelion.dub.dto.OAuth.OAuthInfoResponse;
+import com.likelion.dub.dto.OAuth.OAuthLoginParams;
+import com.likelion.dub.dto.OAuth.OAuthProvider;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RequestOAuthInfoService {
+
     private final Map<OAuthProvider, OAuthApiClient> clients;
 
     public RequestOAuthInfoService(List<OAuthApiClient> clients) {
