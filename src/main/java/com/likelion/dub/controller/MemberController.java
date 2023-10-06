@@ -11,6 +11,7 @@ import com.likelion.dub.dto.Member.MemberLoginRequest;
 import com.likelion.dub.dto.OAuth.KakaoLoginParams;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -122,8 +124,10 @@ public class MemberController {
     @PostMapping("/loginKakao")
     public BaseResponse<String> loginKakao(@RequestBody KakaoLoginParams params) {
         try {
-            System.out.println(params.getAuthorizationCode());
+            log.info("params = {}", params.getAuthorizationCode());
             String token = memberService.loginKakao(params);
+            log.info("JWT token = {}", token);
+
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "Bearer " + token);
         } catch (BaseException e) {
             return new BaseResponse(e.getStatus());
