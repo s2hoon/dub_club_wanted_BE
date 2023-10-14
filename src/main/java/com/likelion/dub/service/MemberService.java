@@ -175,6 +175,7 @@ public class MemberService {
         Member member = new Member();
         member.setEmail(oAuthInfoResponse.getEmail());
         member.setName(oAuthInfoResponse.getNickname());
+        member.setRole("USER");
         return memberRepository.save(member).getId();
     }
 
