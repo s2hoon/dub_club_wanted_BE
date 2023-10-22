@@ -7,7 +7,6 @@ import com.likelion.dub.baseResponse.BaseResponseStatus;
 import com.likelion.dub.dto.Club.UpdateTagRequest;
 import com.likelion.dub.service.ClubService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/app/club")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
+//@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 public class ClubController {
 
 

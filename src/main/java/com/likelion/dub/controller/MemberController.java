@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
+//@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 @Slf4j
 public class MemberController {
 

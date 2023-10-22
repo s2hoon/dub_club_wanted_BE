@@ -6,7 +6,6 @@ import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
+//@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 @RequestMapping("/app/jsp")
 public class JspController {
 
@@ -30,7 +29,7 @@ public class JspController {
 
     @GetMapping("/redirect")
     public String kakaoCallback(@RequestParam("code") String code,
-            RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes) {
         // code 값을 main 페이지로 전달
         redirectAttributes.addFlashAttribute("authorizationCode", code);
         return "redirect:/mainView"; // mainView 페이지로 리다이렉트
