@@ -13,8 +13,8 @@ import com.likelion.dub.dto.Post.GetOnePostResponse;
 import com.likelion.dub.repository.MemberRepository;
 import com.likelion.dub.repository.PostRepository;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,17 +41,11 @@ public class PostService {
     public List<GetAllPostResponse> getAllPost() {
 
         List<Post> allPosts = postRepository.findAll();
-        List<GetAllPostResponse> getAllPostResponses = new ArrayList<>();
-
-        for (Post post : allPosts) {
-            GetAllPostResponse getAllPostResponse = new GetAllPostResponse();
-            getAllPostResponse.setId(post.getId());
-            getAllPostResponse.setTitle(post.getTitle());
-            getAllPostResponse.setClubName(post.getClubName());
-            getAllPostResponse.setClubImage(post.getClub().getClubImage());
-
-            getAllPostResponses.add(getAllPostResponse);
-        }
+        // stream 사용
+        List<GetAllPostResponse> getAllPostResponses = allPosts.stream()
+                .map(post -> new GetAllPostResponse(post.getId(), post.getTitle(), post.getClubName(),
+                        post.getClub().getClubImage()))
+                .collect(Collectors.toList());
         return getAllPostResponses;
     }
 
