@@ -50,10 +50,8 @@ public class PostService {
     }
 
 
-    public void writing(String title, String content, MultipartFile image) throws BaseException {
+    public void writing(String email, String title, String content, MultipartFile image) throws BaseException {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         Club club = member.getClub();

@@ -12,7 +12,6 @@ import com.likelion.dub.dto.OAuth.KakaoLoginParams;
 import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -81,8 +80,7 @@ public class MemberController {
      * @param file
      * @return
      */
-    @PostMapping(value = "/sign-up-club", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/sign-up-club")
     public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto,
                                          @RequestPart(value = "image", required = false) MultipartFile file) {
         try {

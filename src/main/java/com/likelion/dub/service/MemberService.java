@@ -131,7 +131,7 @@ public class MemberService {
                 club.setClubImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
             }
             clubRepository.save(club);
-            // 양방향 연관관계설정
+            // 양방향 연관관계설정 //변경 감지
             member.setClub(club);
 
         } catch (IOException e) {

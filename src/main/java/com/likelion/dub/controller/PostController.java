@@ -11,7 +11,6 @@ import com.likelion.dub.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,13 +59,15 @@ public class PostController {
      * @return
      */
 
-    @PostMapping(value = "/write-post", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/write-post")
     public BaseResponse<String> writePost(@ModelAttribute WritingRequest writingRequest) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
             String title = writingRequest.getTitle();
             String content = writingRequest.getContent();
             MultipartFile file = writingRequest.getImage();
-            postService.writing(title, content, file);
+            postService.writing(email, title, content, file);
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "글 작성 성공");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
@@ -102,7 +103,7 @@ public class PostController {
 
     @PutMapping("/edit-post")
     public BaseResponse<String> editPost(@RequestPart(value = "json") PostEditRequest dto,
-            @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         String newTitle = dto.getTitle();
         String newContent = dto.getContent();
         int newCategory = dto.getCategory();
