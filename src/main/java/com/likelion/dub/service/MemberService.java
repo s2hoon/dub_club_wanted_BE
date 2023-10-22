@@ -97,7 +97,7 @@ public class MemberService {
      * @param file
      */
     public void joinClub(String email, String name, String password, String gender, String role,
-            String introduction, String groupName, String category, MultipartFile file) {
+                         String introduction, String groupName, String category, MultipartFile file) {
 
         // 중복 이메일 검사
         Optional<Member> existingMember = memberRepository.findByEmail(email);
@@ -175,6 +175,7 @@ public class MemberService {
         Member member = new Member();
         member.setEmail(oAuthInfoResponse.getEmail());
         member.setName(oAuthInfoResponse.getNickname());
+        member.setRole("USER");
         return memberRepository.save(member).getId();
     }
 
@@ -194,16 +195,15 @@ public class MemberService {
     }
 
 
-    public void changePassword(String currentPassword, String newPassword) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+    public void changePassword(String email, String currentPassword, String newPassword) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         if (bCryptPasswordEncoder.matches(currentPassword, member.getPassword())) {
             // 비밀번호가 일치할 때 처리
             String hashedPassword = bCryptPasswordEncoder.encode(newPassword);
             member.setPassword(hashedPassword);
-            memberRepository.save(member);
+            //service 단 @Transactional 로 인해 save 호출이 필요없음. 즉, flush() 가 자동으로됨
+            //memberRepository.save(member);
         } else {
             throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
         }

@@ -13,6 +13,8 @@ import com.likelion.dub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,7 +84,7 @@ public class MemberController {
     @PostMapping(value = "/sign-up-club", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponse<String> joinClub(@RequestPart(value = "json") ClubMemberJoinRequest dto,
-            @RequestPart(value = "image", required = false) MultipartFile file) {
+                                         @RequestPart(value = "image", required = false) MultipartFile file) {
         try {
             memberService.joinClub(dto.getEmail(), dto.getName(), dto.getPassword(),
                     dto.getGender(), dto.getRole(), dto.getIntroduction(), dto.getGroupName(),
@@ -160,7 +162,9 @@ public class MemberController {
     @PutMapping("/changePwd")
     public BaseResponse<String> changePwd(@RequestBody ChangePwdRequest changePwdRequest) {
         try {
-            memberService.changePassword(changePwdRequest.getCurrentPassword(),
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+            memberService.changePassword(email, changePwdRequest.getCurrentPassword(),
                     changePwdRequest.getNewPassword());
             String result = "비밀번호 수정 완료";
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
