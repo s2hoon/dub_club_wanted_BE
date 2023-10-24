@@ -28,18 +28,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/app/post")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "*", allowedHeaders = "*") //Cors 제거
 @Slf4j
 public class PostController {
 
     private final PostService postService;
 
 
-    /**
-     * 동아리글 전체 조회
-     *
-     * @return
-     */
     @GetMapping("/getAll")
     public BaseResponse<List<GetAllPostResponse>> getAllPost() {
         try {
@@ -50,13 +44,6 @@ public class PostController {
         }
     }
 
-
-    /**
-     * post 작성
-     *
-     * @param writingRequest
-     * @return
-     */
 
     @PostMapping(value = "/write-post")
     public BaseResponse<String> writePost(@ModelAttribute WritingRequest writingRequest) {

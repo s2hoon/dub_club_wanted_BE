@@ -43,8 +43,8 @@ public class PostService {
         List<Post> allPosts = postRepository.findAll();
         // stream 사용
         List<GetAllPostResponse> getAllPostResponses = allPosts.stream()
-                .map(post -> new GetAllPostResponse(post.getId(), post.getTitle(), post.getClubName(),
-                        post.getClub().getClubImage()))
+                .map(post -> new GetAllPostResponse(post.getId(), post.getPostTitle(), post.getClub().getClubName(),
+                        post.getClub().getClubImageUrl()))
                 .collect(Collectors.toList());
         return getAllPostResponses;
     }
@@ -61,10 +61,8 @@ public class PostService {
         String clubName = club.getClubName();
         // post 객체 생성 및 db 에 저장
         Post post = new Post();
-        post.setClubName(clubName);
         post.setClub(club);
-        post.setMember(member);
-        post.setTitle(title);
+        post.setPostTitle(title);
         post.setContent(content);
         try {
             if (image != null) {
@@ -94,13 +92,11 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
         GetOnePostResponse getOnePostResponse = new GetOnePostResponse();
-        getOnePostResponse.setClubName(post.getClubName());
-        getOnePostResponse.setTitle(post.getTitle());
+        getOnePostResponse.setClubName(post.getClub().getClubName());
+        getOnePostResponse.setTitle(post.getPostTitle());
         getOnePostResponse.setContent(post.getContent());
         getOnePostResponse.setPostImage(post.getPostImage());
-        getOnePostResponse.setForm((post.getClub().getForm()));
-        List<String> comments = null;
-        getOnePostResponse.setComments(comments);
+        getOnePostResponse.setForm((post.getClub().getApplyFormUrl()));
         return getOnePostResponse;
     }
 
@@ -121,16 +117,8 @@ public class PostService {
         Member member = memberRepository.findByEmail(email).orElseThrow();
         // 로그인 된 클럽
         String clubName = member.getClub().getClubName();
-        // 로그인 된 post
-        Post member_post = postRepository.findByClubName(clubName).orElseThrow();
 
-        //post id 가 같은지 검사, 같으면 삭제, 다르면 오류출력
-        if (member_post.getId() == id) {
-            postRepository.deleteById(id);
 
-        } else {
-
-        }
     }
 
 

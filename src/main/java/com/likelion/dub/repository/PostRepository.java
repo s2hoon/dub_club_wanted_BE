@@ -13,8 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select p from Post p join fetch p.club")
     List<Post> findAll();
 
-    Optional<Post> findByClubName(String clubName);
-
     Optional<Post> findById(Long id);
 
 

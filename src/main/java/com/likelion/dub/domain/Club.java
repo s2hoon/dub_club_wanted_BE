@@ -1,12 +1,21 @@
 package com.likelion.dub.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @NoArgsConstructor
@@ -22,44 +31,27 @@ public class Club {
     @Column(name = "club_id")
     private Long id;
 
-
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "club")
-    private List<Post> post = new ArrayList<>();
-
-    @Column
-    private String clubName;
-
-    @Column
-    @Lob
-    private String introduction;
-    @Column
-    private String groupName;
-    @Column
-    private String category;
-
-    @Column
-    private String clubImage;
-
-    @Column
-    private String form;
-
-
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.setClub(this);
-    }
+    @Column(length = 32, nullable = false)
+    private String clubName;
 
-    public void setPost(Post post) {
-        this.post.add(post);
-        post.setClub(this);
-    }
+    @Lob
+    @Column
+    private String introduction;
+
+    @Column(length = 32, nullable = false)
+    private String groupName;
+
+
+    @Column(length = 512, nullable = false)
+    private String clubImageUrl;
+
+    @Column(length = 512, nullable = false)
+    private String applyFormUrl;
+
 
 }

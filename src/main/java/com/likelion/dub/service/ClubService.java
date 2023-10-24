@@ -42,7 +42,7 @@ public class ClubService {
         String clubName = member.getClub().getClubName();
         Club club = clubRepository.findByClubName(clubName)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST));
-        club.setForm(url);
+        club.setApplyFormUrl(url);
         clubRepository.save(club);
 
     }
@@ -73,7 +73,7 @@ public class ClubService {
         metadata.setContentLength(file.getSize());
         try {
             amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-            club.setClubImage("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
+            club.setClubImageUrl("https://dubs3.s3.ap-northeast-2.amazonaws.com/" + fileName);
         } catch (IOException e) {
             throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
@@ -88,7 +88,6 @@ public class ClubService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         Club club = member.getClub();
         club.setGroupName(groupName);
-        club.setCategory(category);
         clubRepository.save(club);
     }
 

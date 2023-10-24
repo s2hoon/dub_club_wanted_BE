@@ -1,5 +1,6 @@
 package com.likelion.dub.configuration;
 
+import com.likelion.dub.util.JwtTokenUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
