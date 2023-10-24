@@ -1,10 +1,16 @@
 package com.likelion.dub.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
+import com.likelion.dub.dto.Member.MemberJoinRequest;
+import com.likelion.dub.dto.Member.ToClubRequest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
@@ -22,6 +28,9 @@ public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Test
     void checkEmail_로_이메일_중복체크를할수있다() {
@@ -30,7 +39,7 @@ public class MemberServiceTest {
         //when
         boolean checkEmail = memberService.checkEmail(email);
         //then
-        assertThat(checkEmail).isTrue();
+        Assertions.assertThat(checkEmail).isTrue();
     }
 
 
@@ -42,28 +51,46 @@ public class MemberServiceTest {
         String password = "124";
         String gender = "남자";
         String role = "CLUB";
-
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, name, password, gender, role);
         //when
-
+        String memberName = memberService.join(memberJoinRequest);
         //then
+        Assertions.assertThat(memberName).isEqualTo("조수훈");
     }
 
     @Test
-    void transferToClub() {
+    void transferToClub_으로동아리전환을할수있다() {
         //given
-
+        String email = "suhoon@naver.com";
+        String club_name = "UMC";
+        String introduction = "안녕하세요UMC입니다";
+        String group_name = "코딩동아리";
+        String club_image_url = "naver.com";
+        String question1 = "지원동기??";
+        ToClubRequest toClubRequest = new ToClubRequest();
+        toClubRequest.setClubName(club_name);
+        toClubRequest.setIntroduction(introduction);
+        toClubRequest.setGroup(group_name);
+        toClubRequest.setClubImageUrl(club_image_url);
+        toClubRequest.setQuestion1(question1);
         //when
-
+        String clubName = memberService.transferToClub(email, toClubRequest);
         //then
+        Assertions.assertThat(clubName).isEqualTo("UMC");
+
     }
 
     @Test
-    void login() {
+    void login_으로_로그인할수가있다() {
         //given
-
+        String email = "suhoon@naver.com";
+        String password = "1234";
+        BDDMockito.given(bCryptPasswordEncoder.matches(any(), any())).willReturn(true);
         //when
+        String token = memberService.login(email, password);
 
         //then
+        Assertions.assertThat(token).isNotEmpty();
     }
 
     @Test

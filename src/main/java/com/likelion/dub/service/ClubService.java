@@ -42,7 +42,7 @@ public class ClubService {
         String clubName = member.getClub().getClubName();
         Club club = clubRepository.findByClubName(clubName)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST));
-        club.setApplyFormUrl(url);
+
         clubRepository.save(club);
 
     }

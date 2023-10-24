@@ -96,7 +96,6 @@ public class PostService {
         getOnePostResponse.setTitle(post.getPostTitle());
         getOnePostResponse.setContent(post.getContent());
         getOnePostResponse.setPostImage(post.getPostImage());
-        getOnePostResponse.setForm((post.getClub().getApplyFormUrl()));
         return getOnePostResponse;
     }
 

@@ -52,7 +52,7 @@ public class MemberService {
         return true;
     }
 
-    public void join(MemberJoinRequest memberJoinRequest) {
+    public String join(MemberJoinRequest memberJoinRequest) {
         // 중복 이메일 검사
         Optional<Member> existingMember = memberRepository.findByEmail(memberJoinRequest.getEmail());
         if (existingMember.isPresent()) {
@@ -64,11 +64,12 @@ public class MemberService {
         String hashedPassword = bCryptPasswordEncoder.encode(memberJoinRequest.getPassword());
         member.setPassword(hashedPassword);
         member.setGender(memberJoinRequest.getGender());
-        member.setRole(memberJoinRequest.getRole());
+        member.setRole("USER");
         memberRepository.save(member);
+        return member.getName();
     }
 
-    public void transferToClub(String email, ToClubRequest toClubRequest) {
+    public String transferToClub(String email, ToClubRequest toClubRequest) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         Club club = new Club();
@@ -76,10 +77,12 @@ public class MemberService {
         club.setIntroduction(toClubRequest.getIntroduction());
         club.setGroupName(toClubRequest.getGroup());
         club.setClubImageUrl(toClubRequest.getClubImageUrl());
-        club.setApplyFormUrl(toClubRequest.getFormUrl());
+        club.setQuestion1("지원동기??");
         club.setMember(member);
         member.setClub(club); //변경감지
+        member.setRole("CLUB"); //변경감지
         clubRepository.save(club);
+        return club.getClubName();
     }
 
 

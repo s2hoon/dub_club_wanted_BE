@@ -36,7 +36,7 @@ public class Member {
     @Column(length = 32, nullable = false)
     private String name;
 
-    @Column(length = 32, nullable = false)
+    @Column(length = 512, nullable = false)
     private String password;
 
     @Column(length = 32, nullable = true)

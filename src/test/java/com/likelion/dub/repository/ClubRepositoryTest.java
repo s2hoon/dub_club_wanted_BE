@@ -18,7 +18,6 @@ import org.springframework.test.context.jdbc.SqlGroup;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource("classpath:test-application.properties")
 @SqlGroup({
-        @Sql(value = "/sql/member-repository-test-data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(value = "/sql/club-repository-test-data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 })
 public class ClubRepositoryTest {
@@ -31,17 +30,17 @@ public class ClubRepositoryTest {
     public void findByClubName_으로_동아리를_가져올수있다() {
         //given
         //when
-        Optional<Club> club = clubRepository.findByClubName("멋쟁이사자");
+        Optional<Club> club = clubRepository.findByClubName("멋쟁이사지");
 
         //then
         assertThat(club.isPresent()).isTrue();
     }
-
+    
     @Test
     public void findByClubName_으로_동아리장을_가져올수_있다() {
         //given
         //when
-        Optional<Club> club = clubRepository.findByClubName("멋쟁이사자");
+        Optional<Club> club = clubRepository.findByClubName("멋쟁이사지");
         Optional<Member> member = Optional.ofNullable(club.get().getMember());
         //then
         assertThat(member.isPresent()).isTrue();

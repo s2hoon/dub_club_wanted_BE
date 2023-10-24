@@ -50,8 +50,14 @@ public class Club {
     @Column(length = 512, nullable = false)
     private String clubImageUrl;
 
-    @Column(length = 512, nullable = false)
-    private String applyFormUrl;
+    @Column(length = 512)
+    private String question1;
+
+    @Column(length = 512)
+    private String question2;
+
+    @Column(length = 512)
+    private String question3;
 
 
 }

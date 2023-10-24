@@ -2,6 +2,7 @@ package com.likelion.dub.domain;
 
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,5 +36,14 @@ public class ClubApply extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
+
+    @Column(length = 512)
+    private String answer1;
+
+    @Column(length = 512)
+    private String answer2;
+
+    @Column(length = 512)
+    private String answer3;
 
 }

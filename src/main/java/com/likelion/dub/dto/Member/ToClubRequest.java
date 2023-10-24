@@ -3,11 +3,15 @@ package com.likelion.dub.dto.Member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Lob;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ToClubRequest {
 
     @JsonProperty
@@ -24,7 +28,13 @@ public class ToClubRequest {
     private String clubImageUrl;
 
     @JsonProperty
-    private String formUrl;
-    
+    private String question1;
+
+    @JsonProperty
+    private String question2;
+
+    @JsonProperty
+    private String question3;
+
 
 }
