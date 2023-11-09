@@ -85,7 +85,6 @@ public class ClubService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         Club club = member.getClub();
-        club.setGroupName(groupName);
         clubRepository.save(club);
     }
 

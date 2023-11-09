@@ -10,8 +10,10 @@ import com.likelion.dub.member.domain.MemberLoginRequest;
 import com.likelion.dub.member.domain.ToClubRequest;
 import com.likelion.dub.member.service.MemberService;
 import com.likelion.dub.token.domain.KakaoLoginParams;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +35,11 @@ public class MemberController {
 
     // 이메일 중복체크
     @GetMapping("/email/{email}")
-    public BaseResponse<String> checkEmail(@PathVariable String email) {
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public BaseResponse<String> checkEmail(@PathVariable String email, Principal principal) {
+
         try {
+            log.info("user email :{} ", principal.getName());
             boolean isEmailAvailable = memberService.checkEmail(email);
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "이메일 사용 가능");
         } catch (BaseException e) {
@@ -97,6 +102,7 @@ public class MemberController {
     // 회원 정보 조회
     @GetMapping("/getInfo")
     public BaseResponse<GetMemberInfoResponse> getInfo() {
+
         try {
             GetMemberInfoResponse getMemberInfoResponse = memberService.getInfo();
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, getMemberInfoResponse);

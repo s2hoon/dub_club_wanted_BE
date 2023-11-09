@@ -65,7 +65,7 @@ public class MemberService {
         String hashedPassword = bCryptPasswordEncoder.encode(memberJoinRequest.getPassword());
         member.setPassword(hashedPassword);
         member.setGender(memberJoinRequest.getGender());
-        member.setRole("USER");
+        member.setRole("ROLE_USER");
         memberRepository.save(member);
         return member.getName();
     }

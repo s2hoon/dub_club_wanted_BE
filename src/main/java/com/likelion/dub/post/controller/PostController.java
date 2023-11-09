@@ -61,12 +61,7 @@ public class PostController {
 
     }
 
-    /**
-     * post 보기
-     *
-     * @param id
-     * @return
-     */
+
     @GetMapping("/read-post/{id}")
     public BaseResponse<GetOnePostResponse> readPost(@PathVariable Long id) throws BaseException {
 
