@@ -8,7 +8,7 @@ import com.likelion.dub.club.infrastructure.ClubRepository;
 import com.likelion.dub.common.baseResponse.BaseException;
 import com.likelion.dub.common.baseResponse.BaseResponseStatus;
 import com.likelion.dub.member.infrastructure.Member;
-import com.likelion.dub.member.infrastructure.MemberRepository;
+import com.likelion.dub.member.infrastructure.MemberJpaRepository;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ClubService {
 
     private final ClubRepository clubRepository;
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -37,7 +37,7 @@ public class ClubService {
     public void uploadForm(String url) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         String clubName = member.getClub().getClubName();
         Club club = clubRepository.findByClubName(clubName)
@@ -50,7 +50,7 @@ public class ClubService {
     public void updateIntroduce(String introduction) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         String clubName = member.getClub().getClubName();
         Club club = clubRepository.findByClubName(clubName)
@@ -63,7 +63,7 @@ public class ClubService {
     public void updateClubImage(MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         Club club = member.getClub();
         String clubName = club.getClubName();
@@ -82,7 +82,7 @@ public class ClubService {
     }
 
     public void updateTag(String tagName, String email) {
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         Club club = member.getClub();
         clubRepository.save(club);

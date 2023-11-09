@@ -2,7 +2,7 @@ package com.likelion.dub.configuration;
 
 import com.likelion.dub.common.util.JwtTokenUtil;
 import com.likelion.dub.member.infrastructure.Member;
-import com.likelion.dub.member.infrastructure.MemberRepository;
+import com.likelion.dub.member.infrastructure.MemberJpaRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
 
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
     @Value("${jwt.token.secret}")
     private String secretKey;
@@ -50,7 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String email = JwtTokenUtil.getEmail(token, secretKey);
         String role = JwtTokenUtil.getRole(token, secretKey);
         log.info("email:{}", email);
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("jwt에 있는 email 이 회원가입 되어있지 않습니다"));
 
         log.info("role:{}", role);

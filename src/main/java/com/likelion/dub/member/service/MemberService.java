@@ -6,12 +6,12 @@ import com.likelion.dub.club.infrastructure.Club;
 import com.likelion.dub.club.infrastructure.ClubRepository;
 import com.likelion.dub.common.baseResponse.BaseException;
 import com.likelion.dub.common.baseResponse.BaseResponseStatus;
+import com.likelion.dub.common.enumeration.Role;
 import com.likelion.dub.common.util.JwtTokenUtil;
 import com.likelion.dub.member.dto.GetMemberInfoResponse;
 import com.likelion.dub.member.dto.MemberJoinRequest;
 import com.likelion.dub.member.dto.ToClubRequest;
 import com.likelion.dub.member.infrastructure.Member;
-import com.likelion.dub.member.infrastructure.MemberRepository;
 import com.likelion.dub.oAuth.domain.OAuthInfoResponse;
 import com.likelion.dub.oAuth.domain.OAuthLoginParams;
 import com.likelion.dub.oAuth.service.RequestOAuthInfoService;
@@ -59,13 +59,14 @@ public class MemberService {
         if (existingMember.isPresent()) {
             throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
         }
+
         Member member = new Member();
         member.setEmail(memberJoinRequest.getEmail());
         member.setName(memberJoinRequest.getName());
         String hashedPassword = bCryptPasswordEncoder.encode(memberJoinRequest.getPassword());
         member.setPassword(hashedPassword);
         member.setGender(memberJoinRequest.getGender());
-        member.setRole("ROLE_USER");
+        member.setRole(Role.USER.getRoleName());
         memberRepository.save(member);
         return member.getName();
     }

@@ -3,7 +3,7 @@ package com.likelion.dub.member;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.likelion.dub.member.infrastructure.Member;
-import com.likelion.dub.member.infrastructure.MemberRepository;
+import com.likelion.dub.member.infrastructure.MemberJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +17,18 @@ import org.springframework.test.context.jdbc.Sql;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource("classpath:test-application.properties")
 @Sql("/sql/member-repository-test-data.sql")
-public class MemberRepositoryTest {
+public class MemberJpaRepositoryTest {
 
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
 
 
     @Test
     void findById_로_멤버_찾아오기() {
         //given
         //when
-        Optional<Member> member = memberRepository.findById(1L);
+        Optional<Member> member = memberJpaRepository.findById(1L);
 
         //then
         assertThat(member.isPresent()).isTrue();
@@ -39,7 +39,7 @@ public class MemberRepositoryTest {
     void findById_는_데이터가_없으면_Optional_empty_를_반환한다() {
         //given
         //when
-        Optional<Member> member = memberRepository.findById(3L);
+        Optional<Member> member = memberJpaRepository.findById(3L);
         //then
         assertThat(member.isEmpty()).isTrue();
 
@@ -49,7 +49,7 @@ public class MemberRepositoryTest {
     void findByEmail_로_멤버_데이터를_찾아올_수_있다() {
         // given
         // when
-        Optional<Member> member = memberRepository.findByEmail("suhoon@naver.com");
+        Optional<Member> member = memberJpaRepository.findByEmail("suhoon@naver.com");
 
         // then
         assertThat(member.isPresent()).isTrue();
@@ -59,7 +59,7 @@ public class MemberRepositoryTest {
     void findByEmail는_데이터가_없으면_Optional_empty_를_내려준다() {
         // given
         // when
-        Optional<Member> member = memberRepository.findByEmail("fafafafa@naver.com");
+        Optional<Member> member = memberJpaRepository.findByEmail("fafafafa@naver.com");
 
         // then
         assertThat(member.isEmpty()).isTrue();

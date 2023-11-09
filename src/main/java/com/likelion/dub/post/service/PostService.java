@@ -7,7 +7,7 @@ import com.likelion.dub.club.infrastructure.Club;
 import com.likelion.dub.common.baseResponse.BaseException;
 import com.likelion.dub.common.baseResponse.BaseResponseStatus;
 import com.likelion.dub.member.infrastructure.Member;
-import com.likelion.dub.member.infrastructure.MemberRepository;
+import com.likelion.dub.member.infrastructure.MemberJpaRepository;
 import com.likelion.dub.post.domain.GetAllPostResponse;
 import com.likelion.dub.post.domain.GetOnePostResponse;
 import com.likelion.dub.post.infrastructure.Post;
@@ -31,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -52,7 +52,7 @@ public class PostService {
 
     public void writing(String email, String title, String content, MultipartFile image) throws BaseException {
 
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         Club club = member.getClub();
         if (club == null) {
@@ -113,7 +113,7 @@ public class PostService {
         // 로그인 된 이메일
         String email = authentication.getName();
         // 로그인 된 멤버
-        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Member member = memberJpaRepository.findByEmail(email).orElseThrow();
         // 로그인 된 클럽
         String clubName = member.getClub().getClubName();
 
