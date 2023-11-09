@@ -3,7 +3,7 @@ package com.likelion.dub.common.enumeration;
 public enum Role {
     ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER"),
-    CLUB("ROLE_CLUB")
+    CLUB("ROLE_CLUB");
 
 
     private String roleName;
