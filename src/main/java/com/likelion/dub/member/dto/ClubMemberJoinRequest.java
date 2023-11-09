@@ -1,18 +1,17 @@
-package com.likelion.dub.member.domain;
+package com.likelion.dub.member.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nullable;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
+
 @Getter
-@NoArgsConstructor
 @Setter
-public class MemberJoinRequest {
+@NoArgsConstructor
+public class ClubMemberJoinRequest {
 
     @JsonProperty
     private String email;
@@ -20,11 +19,19 @@ public class MemberJoinRequest {
     private String name;
     @JsonProperty
     private String password;
-    @JsonProperty
-    @Nullable
-    private String gender;
+
     @JsonProperty
     private String role;
+
+    @JsonProperty
+    private String group;
+
+    @JsonProperty
+    private String category;
+
+    @JsonProperty
+    @Lob
+    private String introduction;
 
 
 }

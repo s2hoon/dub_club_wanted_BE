@@ -1,4 +1,4 @@
-package com.likelion.dub.token.domain;
+package com.likelion.dub.oAuth.domain;
 
 
 import lombok.AllArgsConstructor;

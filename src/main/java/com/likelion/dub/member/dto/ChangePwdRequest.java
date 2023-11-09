@@ -1,4 +1,4 @@
-package com.likelion.dub.member.domain;
+package com.likelion.dub.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

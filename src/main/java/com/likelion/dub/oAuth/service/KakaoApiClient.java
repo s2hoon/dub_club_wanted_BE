@@ -1,10 +1,10 @@
-package com.likelion.dub.token.service;
+package com.likelion.dub.oAuth.service;
 
-import com.likelion.dub.token.domain.KakaoInfoResponse;
-import com.likelion.dub.token.domain.KakaoTokens;
-import com.likelion.dub.token.domain.OAuthInfoResponse;
-import com.likelion.dub.token.domain.OAuthLoginParams;
-import com.likelion.dub.token.domain.OAuthProvider;
+import com.likelion.dub.oAuth.domain.KakaoInfoResponse;
+import com.likelion.dub.oAuth.domain.KakaoTokens;
+import com.likelion.dub.oAuth.domain.OAuthInfoResponse;
+import com.likelion.dub.oAuth.domain.OAuthLoginParams;
+import com.likelion.dub.oAuth.domain.OAuthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

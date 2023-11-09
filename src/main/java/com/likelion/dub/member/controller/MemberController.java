@@ -3,14 +3,16 @@ package com.likelion.dub.member.controller;
 import com.likelion.dub.common.baseResponse.BaseException;
 import com.likelion.dub.common.baseResponse.BaseResponse;
 import com.likelion.dub.common.baseResponse.BaseResponseStatus;
-import com.likelion.dub.member.domain.ChangePwdRequest;
-import com.likelion.dub.member.domain.GetMemberInfoResponse;
-import com.likelion.dub.member.domain.MemberJoinRequest;
-import com.likelion.dub.member.domain.MemberLoginRequest;
-import com.likelion.dub.member.domain.ToClubRequest;
+import com.likelion.dub.common.util.SecurityUtil;
+import com.likelion.dub.member.dto.ChangePwdRequest;
+import com.likelion.dub.member.dto.GetMemberInfoResponse;
+import com.likelion.dub.member.dto.MemberJoinRequest;
+import com.likelion.dub.member.dto.MemberLoginRequest;
+import com.likelion.dub.member.dto.ToClubRequest;
 import com.likelion.dub.member.service.MemberService;
-import com.likelion.dub.token.domain.KakaoLoginParams;
+import com.likelion.dub.oAuth.domain.KakaoLoginParams;
 import java.security.Principal;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,13 +35,19 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    // 테스트 api
+    @GetMapping("/testing")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public BaseResponse<String> testing() {
+        Optional<String> email = SecurityUtil.getCurrentUsername();
+        log.info("email = {}", email);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS, "테스트 성공");
+    }
+
     // 이메일 중복체크
     @GetMapping("/email/{email}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public BaseResponse<String> checkEmail(@PathVariable String email, Principal principal) {
-
         try {
-            log.info("user email :{} ", principal.getName());
             boolean isEmailAvailable = memberService.checkEmail(email);
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "이메일 사용 가능");
         } catch (BaseException e) {

@@ -1,8 +1,8 @@
-package com.likelion.dub.token.service;
+package com.likelion.dub.oAuth.service;
 
-import com.likelion.dub.token.domain.OAuthInfoResponse;
-import com.likelion.dub.token.domain.OAuthLoginParams;
-import com.likelion.dub.token.domain.OAuthProvider;
+import com.likelion.dub.oAuth.domain.OAuthInfoResponse;
+import com.likelion.dub.oAuth.domain.OAuthLoginParams;
+import com.likelion.dub.oAuth.domain.OAuthProvider;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
