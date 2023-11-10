@@ -8,12 +8,11 @@ import com.likelion.dub.member.dto.request.MemberJoinRequest;
 import com.likelion.dub.member.dto.request.MemberLoginRequest;
 import com.likelion.dub.member.dto.request.ToClubRequest;
 import com.likelion.dub.member.service.MemberService;
+import java.security.Principal;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +31,7 @@ public class MemberController {
 
     // 테스트 api
     @GetMapping("/testing")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CLUB','ADMIN')")
     public BaseResponse<String> testing() {
         Optional<String> email = SecurityUtil.getCurrentUsername();
         log.info("email = {}", email);
@@ -67,7 +66,6 @@ public class MemberController {
         try {
             String token = memberService.login(memberLoginRequest.getEmail(), memberLoginRequest.getPassword());
             return new BaseResponse<>(BaseResponseStatus.SUCCESS, "Bearer " + token);
-
         } catch (BaseException e) {
             return new BaseResponse(e.getStatus());
         }
@@ -76,12 +74,12 @@ public class MemberController {
 
     // 동아리 회원으로 전환
     @PostMapping("/toClub")
-    public BaseResponse<String> toClub(@RequestBody ToClubRequest toClubRequest) {
+    @PreAuthorize("hasAnyRole('USER')")
+    public BaseResponse<String> toClub(@RequestBody ToClubRequest toClubRequest, Principal principal) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-            memberService.transferToClub(email, toClubRequest);
-            return new BaseResponse<>(BaseResponseStatus.SUCCESS, "동아리 회원으로 전환 완료");
+            String email = principal.getName();
+            String clubName = memberService.transferToClub(email, toClubRequest);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS, clubName + " 동아리 회원으로 전환 완료");
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

@@ -1,4 +1,4 @@
-package com.likelion.dub.configuration;
+package com.likelion.dub.common.configuration;
 
 import java.util.Optional;
 import org.springframework.context.annotation.Configuration;

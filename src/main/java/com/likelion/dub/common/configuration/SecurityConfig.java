@@ -1,4 +1,4 @@
-package com.likelion.dub.configuration;
+package com.likelion.dub.common.configuration;
 
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

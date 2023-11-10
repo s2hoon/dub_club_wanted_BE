@@ -6,10 +6,13 @@ import com.likelion.dub.club.infrastructure.Club;
 import com.likelion.dub.club.infrastructure.ClubRepository;
 import com.likelion.dub.common.baseResponse.BaseException;
 import com.likelion.dub.common.baseResponse.BaseResponseStatus;
+import com.likelion.dub.common.enumeration.Role;
 import com.likelion.dub.common.util.JwtTokenUtil;
 import com.likelion.dub.member.domain.MemberDomain;
 import com.likelion.dub.member.dto.request.MemberJoinRequest;
 import com.likelion.dub.member.dto.request.ToClubRequest;
+import com.likelion.dub.member.infrastructure.Member;
+import com.likelion.dub.member.infrastructure.MemberJpaRepository;
 import com.likelion.dub.oAuth.service.RequestOAuthInfoService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MemberJpaRepository memberJpaRepository;
 
     private final ClubRepository clubRepository;
     private final AmazonS3Client amazonS3Client;
@@ -72,7 +76,7 @@ public class MemberService {
     }
 
     public String transferToClub(String email, ToClubRequest toClubRequest) {
-        MemberDomain memberDomain = memberRepository.findByEmail(email)
+        Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
         Club club = new Club();
         club.setClubName(toClubRequest.getClubName());
@@ -80,9 +84,11 @@ public class MemberService {
         club.setGroupName(toClubRequest.getGroup());
         club.setClubImageUrl(toClubRequest.getClubImageUrl());
         club.setQuestion1("지원동기??");
-//        club.setMember(member);
-//        member.setClub(club); //변경감지
-//        member.setRole(Role.ROLE_CLUB); //변경감지
+        club.setQuestion2("두번쨰 질문");
+        club.setQuestion3("세번째 질문");
+        club.setMember(member);
+        member.setClub(club); //변경감지
+        member.setRole(Role.ROLE_CLUB); //변경감지
         clubRepository.save(club);
         return club.getClubName();
     }

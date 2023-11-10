@@ -1,4 +1,4 @@
-package com.likelion.dub.club.domain;
+package com.likelion.dub.club.dto.request;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

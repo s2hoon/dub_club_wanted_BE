@@ -1,4 +1,4 @@
-package com.likelion.dub.configuration;
+package com.likelion.dub.common.configuration;
 
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -21,7 +21,7 @@ public class S3config {
 
     @Bean
     public AmazonS3Client amazonS3Client() {
-        BasicAWSCredentials awsCredentials= new BasicAWSCredentials(accessKey, secretKey);
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))

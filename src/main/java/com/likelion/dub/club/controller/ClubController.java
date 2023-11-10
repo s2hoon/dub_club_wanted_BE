@@ -1,7 +1,7 @@
 package com.likelion.dub.club.controller;
 
 
-import com.likelion.dub.club.domain.UpdateTagRequest;
+import com.likelion.dub.club.dto.request.UpdateTagRequest;
 import com.likelion.dub.club.service.ClubService;
 import com.likelion.dub.common.baseResponse.BaseException;
 import com.likelion.dub.common.baseResponse.BaseResponse;

@@ -5,10 +5,12 @@ import com.likelion.dub.common.enumeration.Role;
 import com.likelion.dub.member.dto.request.MemberJoinRequest;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 
 @Getter
 @Builder
+@Setter
 public class MemberDomain {
 
     private Long id;

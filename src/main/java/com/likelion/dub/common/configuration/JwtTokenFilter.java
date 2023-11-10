@@ -1,4 +1,4 @@
-package com.likelion.dub.configuration;
+package com.likelion.dub.common.configuration;
 
 import com.likelion.dub.common.util.JwtTokenUtil;
 import com.likelion.dub.member.infrastructure.Member;
