@@ -59,16 +59,29 @@ public class MemberService {
         if (existingMember.isPresent()) {
             throw new BaseException(BaseResponseStatus.EMAIL_ALREADY_EXIST);
         }
-
         Member member = new Member();
         member.setEmail(memberJoinRequest.getEmail());
         member.setName(memberJoinRequest.getName());
         String hashedPassword = bCryptPasswordEncoder.encode(memberJoinRequest.getPassword());
         member.setPassword(hashedPassword);
         member.setGender(memberJoinRequest.getGender());
-        member.setRole(Role.USER.getRoleName());
+        member.setRole(Role.ROLE_USER);
         memberRepository.save(member);
         return member.getName();
+    }
+
+
+    public String login(String email, String password) throws BaseException {
+        //email 중복확인
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
+        //비밀번호 틀림
+        if (!bCryptPasswordEncoder.matches(password, member.getPassword())) {
+            throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
+        }
+        String token = JwtTokenUtil.createToken(member.getEmail(), member.getRole().toString(),
+                member.getName(), key, expireTimeMs);
+        return token;
     }
 
     public String transferToClub(String email, ToClubRequest toClubRequest) {
@@ -82,26 +95,9 @@ public class MemberService {
         club.setQuestion1("지원동기??");
         club.setMember(member);
         member.setClub(club); //변경감지
-        member.setRole("CLUB"); //변경감지
+        member.setRole(Role.ROLE_CLUB); //변경감지
         clubRepository.save(club);
         return club.getClubName();
-    }
-
-
-    public String login(String email, String password) throws BaseException {
-        //email 중복확인
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
-
-        //비밀번호 틀림
-        if (!bCryptPasswordEncoder.matches(password, member.getPassword())) {
-            throw new BaseException(BaseResponseStatus.WRONG_PASSWORD);
-        }
-
-        String token = JwtTokenUtil.createToken(member.getEmail(), member.getRole(),
-                member.getName(), key, expireTimeMs);
-
-        return token;
     }
 
 
@@ -109,7 +105,7 @@ public class MemberService {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long memberId = findOrCreateMember(oAuthInfoResponse);
         Member member = memberRepository.findById(memberId).orElseThrow();
-        return JwtTokenUtil.createToken(member.getEmail(), member.getRole(), member.getName(), key,
+        return JwtTokenUtil.createToken(member.getEmail(), String.valueOf(Role.ROLE_USER), member.getName(), key,
                 expireTimeMs);
     }
 
@@ -123,7 +119,7 @@ public class MemberService {
         Member member = new Member();
         member.setEmail(oAuthInfoResponse.getEmail());
         member.setName(oAuthInfoResponse.getNickname());
-        member.setRole("USER");
+        member.setRole(Role.ROLE_USER);
         return memberRepository.save(member).getId();
     }
 
@@ -136,7 +132,7 @@ public class MemberService {
         GetMemberInfoResponse getMemberInfoResponse = new GetMemberInfoResponse();
         getMemberInfoResponse.setName(member.getName());
         getMemberInfoResponse.setGender(member.getGender());
-        getMemberInfoResponse.setRole(member.getRole());
+
         getMemberInfoResponse.setEmail(member.getEmail());
         return getMemberInfoResponse;
     }

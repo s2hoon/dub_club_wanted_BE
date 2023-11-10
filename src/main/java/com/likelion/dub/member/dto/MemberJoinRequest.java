@@ -23,8 +23,5 @@ public class MemberJoinRequest {
     @JsonProperty
     @Nullable
     private String gender;
-    @JsonProperty
-    private String role;
-
 
 }

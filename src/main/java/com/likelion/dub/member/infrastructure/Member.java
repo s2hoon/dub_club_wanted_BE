@@ -1,8 +1,11 @@
 package com.likelion.dub.member.infrastructure;
 
 import com.likelion.dub.club.infrastructure.Club;
+import com.likelion.dub.common.enumeration.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,8 +46,8 @@ public class Member {
     @Column(length = 32, nullable = true)
     private String gender;
 
-    @Column(length = 32, nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
 }
