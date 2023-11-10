@@ -1,4 +1,4 @@
-package com.likelion.dub.member.dto;
+package com.likelion.dub.member.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

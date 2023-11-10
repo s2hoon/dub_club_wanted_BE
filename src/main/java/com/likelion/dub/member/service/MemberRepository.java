@@ -1,14 +1,15 @@
 package com.likelion.dub.member.service;
 
-import com.likelion.dub.member.infrastructure.Member;
+import com.likelion.dub.member.domain.MemberDomain;
 import java.util.Optional;
 
 public interface MemberRepository {
 
-    Optional<Member> findByEmail(String email);
+    Optional<MemberDomain> findByEmail(String email);
 
-    Member save(Member member);
-    
-    Optional<Member> findById(Long memberId);
+
+    Optional<MemberDomain> findById(Long memberId);
+
+    MemberDomain save(MemberDomain memberDomain);
 
 }

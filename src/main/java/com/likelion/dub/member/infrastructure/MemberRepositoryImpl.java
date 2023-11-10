@@ -1,6 +1,7 @@
 package com.likelion.dub.member.infrastructure;
 
 
+import com.likelion.dub.member.domain.MemberDomain;
 import com.likelion.dub.member.service.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +14,18 @@ public class MemberRepositoryImpl implements MemberRepository {
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
-    public Optional<Member> findByEmail(String email) {
-        return memberJpaRepository.findByEmail(email);
+    public Optional<MemberDomain> findByEmail(String email) {
+        return memberJpaRepository.findByEmail(email).map(Member::toDomain);
     }
 
     @Override
-    public Member save(Member member) {
-        return memberJpaRepository.save(member);
+    public MemberDomain save(MemberDomain memberDomain) {
+        return memberJpaRepository.save(Member.fromDomain(memberDomain)).toDomain();
     }
 
     @Override
-    public Optional<Member> findById(Long memberId) {
-        return memberJpaRepository.findById(memberId);
+    public Optional<MemberDomain> findById(Long memberId) {
+        return memberJpaRepository.findById(memberId).map(Member::toDomain);
     }
 }
 

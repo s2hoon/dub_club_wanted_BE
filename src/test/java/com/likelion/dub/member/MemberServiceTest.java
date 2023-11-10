@@ -2,8 +2,8 @@ package com.likelion.dub.member;
 
 import static org.mockito.ArgumentMatchers.any;
 
-import com.likelion.dub.member.dto.MemberJoinRequest;
-import com.likelion.dub.member.dto.ToClubRequest;
+import com.likelion.dub.member.dto.request.MemberJoinRequest;
+import com.likelion.dub.member.dto.request.ToClubRequest;
 import com.likelion.dub.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

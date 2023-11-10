@@ -1,4 +1,4 @@
-package com.likelion.dub.member.dto;
+package com.likelion.dub.member.dto.response;
 
 
 import com.likelion.dub.club.infrastructure.Club;

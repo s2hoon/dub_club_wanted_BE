@@ -2,6 +2,7 @@ package com.likelion.dub.member.infrastructure;
 
 import com.likelion.dub.club.infrastructure.Club;
 import com.likelion.dub.common.enumeration.Role;
+import com.likelion.dub.member.domain.MemberDomain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,6 +49,30 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public static Member fromDomain(MemberDomain memberDomain) {
+        Member member = new Member();
+        member.id = memberDomain.getId();
+        member.email = memberDomain.getEmail();
+        member.name = memberDomain.getName();
+        member.gender = memberDomain.getGender();
+        member.password = memberDomain.getPassword();
+        member.role = memberDomain.getRole();
+        return member;
+    }
+
+
+    public MemberDomain toDomain() {
+        return MemberDomain.builder()
+                .id(id)
+                .email(email)
+                .name(name)
+                .password(password)
+                .gender(gender)
+                .role(role)
+                .build();
+
+    }
 
 
 }
