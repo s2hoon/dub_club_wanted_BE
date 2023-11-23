@@ -61,5 +61,6 @@ public class Club {
     @Column(length = 512)
     private String question3;
 
-
+    @Column(length = 512)
+    private String formUrl;
 }

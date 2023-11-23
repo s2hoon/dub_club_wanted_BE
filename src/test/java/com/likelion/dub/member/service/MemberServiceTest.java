@@ -1,13 +1,10 @@
-package com.likelion.dub.member;
-
-import static org.mockito.ArgumentMatchers.any;
+package com.likelion.dub.member.service;
 
 import com.likelion.dub.member.dto.request.MemberJoinRequest;
 import com.likelion.dub.member.dto.request.ToClubRequest;
-import com.likelion.dub.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,6 +26,7 @@ public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -47,16 +45,17 @@ public class MemberServiceTest {
     @Test
     void join_으로_회원가입을할수있다() {
         //given
-        String email = "suhoon@naver.com";
-        String name = "조수훈";
+        String email = "test@naver.com";
+        String name = "조시훈";
         String password = "124";
         String gender = "남자";
-        String role = "CLUB";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, name, password, gender, role);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, name, password, gender);
+        String encodedPassword = "hased_pasword";
+        Mockito.when(bCryptPasswordEncoder.encode(Mockito.anyString())).thenReturn(encodedPassword);
         //when
         String memberName = memberService.join(memberJoinRequest);
         //then
-        Assertions.assertThat(memberName).isEqualTo("조수훈");
+        Assertions.assertThat(memberName).isEqualTo("조시훈");
     }
 
     @Test
@@ -84,9 +83,15 @@ public class MemberServiceTest {
     @Test
     void login_으로_로그인할수가있다() {
         //given
-        String email = "suhoon@naver.com";
-        String password = "1234";
-        BDDMockito.given(bCryptPasswordEncoder.matches(any(), any())).willReturn(true);
+        String email = "test@naver.com";
+        String name = "조시훈";
+        String password = "124";
+        String gender = "남자";
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, name, password, gender);
+        String encodedPassword = "hased_pasword";
+        Mockito.when(bCryptPasswordEncoder.encode(Mockito.anyString())).thenReturn(encodedPassword);
+        String memberName = memberService.join(memberJoinRequest);
+        Mockito.when(bCryptPasswordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         //when
         String token = memberService.login(email, password);
 

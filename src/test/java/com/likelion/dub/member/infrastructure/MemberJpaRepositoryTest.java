@@ -1,9 +1,7 @@
-package com.likelion.dub.member;
+package com.likelion.dub.member.infrastructure;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.likelion.dub.member.infrastructure.Member;
-import com.likelion.dub.member.infrastructure.MemberJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

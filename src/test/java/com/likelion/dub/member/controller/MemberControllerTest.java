@@ -1,4 +1,4 @@
-package com.likelion.dub.member;
+package com.likelion.dub.member.controller;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

@@ -13,8 +13,6 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,22 +32,18 @@ public class ClubService {
     private String bucket;
 
 
-    public void uploadForm(String url) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+    public String uploadForm(String url, String email) {
         Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         String clubName = member.getClub().getClubName();
         Club club = clubRepository.findByClubName(clubName)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST));
-
+        club.setFormUrl(url);
         clubRepository.save(club);
-
+        return club.getFormUrl();
     }
 
-    public void updateIntroduce(String introduction) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+    public String updateIntroduce(String introduction, String email) {
         Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         String clubName = member.getClub().getClubName();
@@ -57,12 +51,11 @@ public class ClubService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_CLUB_EXIST));
         club.setIntroduction(introduction);
         clubRepository.save(club);
+        return club.getIntroduction();
     }
 
 
-    public void updateClubImage(MultipartFile file) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+    public String updateClubImage(MultipartFile file, String email) {
         Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
         Club club = member.getClub();
@@ -78,14 +71,9 @@ public class ClubService {
             throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
         clubRepository.save(club);
+        return club.getClubImageUrl();
 
     }
 
-    public void updateTag(String tagName, String email) {
-        Member member = memberJpaRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.WRONG_EMAIL));
-        Club club = member.getClub();
-        clubRepository.save(club);
-    }
 
 }
