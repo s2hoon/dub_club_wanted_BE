@@ -50,7 +50,7 @@ public class PostService {
     }
 
 
-    public void writing(String email, String title, String content, MultipartFile image) throws BaseException {
+    public String writing(String email, String title, String content, MultipartFile image) throws BaseException {
 
         Member member = memberJpaRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_SUCH_MEMBER_EXIST));
@@ -77,6 +77,7 @@ public class PostService {
             throw new BaseException(BaseResponseStatus.FILE_SAVE_ERROR);
         }
 
+        return post.getPostTitle();
     }
 
 

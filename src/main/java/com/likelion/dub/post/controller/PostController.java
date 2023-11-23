@@ -8,9 +8,11 @@ import com.likelion.dub.post.domain.GetOnePostResponse;
 import com.likelion.dub.post.domain.PostEditRequest;
 import com.likelion.dub.post.domain.WritingRequest;
 import com.likelion.dub.post.service.PostService;
+import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,10 +48,10 @@ public class PostController {
 
 
     @PostMapping(value = "/write-post")
-    public BaseResponse<String> writePost(@ModelAttribute WritingRequest writingRequest) {
+    @PreAuthorize("hasAnyRole('CLUB')")
+    public BaseResponse<String> writePost(@ModelAttribute WritingRequest writingRequest, Principal principal) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
+            String email = principal.getName();
             String title = writingRequest.getTitle();
             String content = writingRequest.getContent();
             MultipartFile file = writingRequest.getImage();
@@ -76,6 +78,7 @@ public class PostController {
 
 
     @DeleteMapping("delete-post")
+    @PreAuthorize("hasAnyRole('CLUB')")
     public BaseResponse<String> deletePost(@RequestParam(value = "id") Long id) {
         postService.deletePost(id);
         String result = "동아리 게시글 삭제 완료";
@@ -83,6 +86,7 @@ public class PostController {
     }
 
     @PutMapping("/edit-post")
+    @PreAuthorize("hasAnyRole('CLUB')")
     public BaseResponse<String> editPost(@RequestPart(value = "json") PostEditRequest dto,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         String newTitle = dto.getTitle();
