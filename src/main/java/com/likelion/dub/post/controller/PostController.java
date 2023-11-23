@@ -47,7 +47,7 @@ public class PostController {
     }
 
 
-    @PostMapping(value = "/write-post")
+    @PostMapping(value = "/writePost")
     @PreAuthorize("hasAnyRole('CLUB')")
     public BaseResponse<String> writePost(@ModelAttribute WritingRequest writingRequest, Principal principal) {
         try {
@@ -64,7 +64,7 @@ public class PostController {
     }
 
 
-    @GetMapping("/read-post/{id}")
+    @GetMapping("/readPost/{id}")
     public BaseResponse<GetOnePostResponse> readPost(@PathVariable Long id) throws BaseException {
 
         try {
@@ -77,7 +77,7 @@ public class PostController {
     }
 
 
-    @DeleteMapping("delete-post")
+    @DeleteMapping("deletePost")
     @PreAuthorize("hasAnyRole('CLUB')")
     public BaseResponse<String> deletePost(@RequestParam(value = "id") Long id) {
         postService.deletePost(id);
@@ -85,7 +85,7 @@ public class PostController {
         return new BaseResponse<>(BaseResponseStatus.SUCCESS, result);
     }
 
-    @PutMapping("/edit-post")
+    @PutMapping("/editPost")
     @PreAuthorize("hasAnyRole('CLUB')")
     public BaseResponse<String> editPost(@RequestPart(value = "json") PostEditRequest dto,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
