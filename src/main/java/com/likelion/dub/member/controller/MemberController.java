@@ -49,8 +49,8 @@ public class MemberController {
         }
     }
 
-    // 일반 회원가입
-    @PostMapping("/sign-up")
+    // 회원가입
+    @PostMapping("/join")
     public BaseResponse<String> join(@RequestBody MemberJoinRequest memberJoinRequest) {
         try {
             memberService.join(memberJoinRequest);
@@ -60,8 +60,8 @@ public class MemberController {
         }
     }
 
-    // 일반 로그인
-    @PostMapping("/sign-in")
+    // 로그인
+    @PostMapping("/login")
     public BaseResponse<String> login(@RequestBody MemberLoginRequest memberLoginRequest) {
         try {
             String token = memberService.login(memberLoginRequest.getEmail(), memberLoginRequest.getPassword());

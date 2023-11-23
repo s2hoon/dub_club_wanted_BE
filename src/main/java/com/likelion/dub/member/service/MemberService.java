@@ -83,9 +83,9 @@ public class MemberService {
         club.setIntroduction(toClubRequest.getIntroduction());
         club.setGroupName(toClubRequest.getGroup());
         club.setClubImageUrl(toClubRequest.getClubImageUrl());
-        club.setQuestion1("지원동기??");
-        club.setQuestion2("두번쨰 질문");
-        club.setQuestion3("세번째 질문");
+        club.setQuestion1(toClubRequest.getQuestion1());
+        club.setQuestion2(toClubRequest.getQuestion2());
+        club.setQuestion3(toClubRequest.getQuestion3());
         club.setMember(member);
         member.setClub(club); //변경감지
         member.setRole(Role.ROLE_CLUB); //변경감지
